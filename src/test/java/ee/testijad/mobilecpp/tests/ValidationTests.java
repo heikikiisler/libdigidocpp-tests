@@ -2,14 +2,16 @@ package ee.testijad.mobilecpp.tests;
 
 import ee.testijad.mobilecpp.appium.Server;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
-import ee.testijad.mobilecpp.ee.testijad.mobileccp.action.Action;
+import ee.testijad.mobilecpp.action.Action;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import org.testng.annotations.*;
 
 public class ValidationTests {
+
     Server appiumServer;
     int communicationPort = Utils.getFreePort();
+
     @BeforeClass
     public void setUp() {
         System.out.println("Before class");

@@ -1,4 +1,4 @@
-package ee.testijad.mobilecpp.ee.testijad.mobileccp.action;
+package ee.testijad.mobilecpp.action;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;

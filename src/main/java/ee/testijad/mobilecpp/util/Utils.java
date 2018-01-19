@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,11 +60,21 @@ public class Utils {
     public static void copyAllDataFiles(String directory) {
         File folder = new File(directory);
         File[] listOfFiles = folder.listFiles();
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                copyFileToAndroid( listOfFiles[i].getName());
+        assert listOfFiles != null;
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                copyFileToAndroid(file.getName());
             }
         }
+    }
+
+    public static String readFileIntoString(String fileName) {
+        StringBuilder contents = new StringBuilder();
+        try {
+            Files.readAllLines(Paths.get(fileName)).forEach(contents::append);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(contents);
     }
 }
