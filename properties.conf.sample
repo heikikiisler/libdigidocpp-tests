@@ -1,0 +1,28 @@
+
+# Appium related configuration
+appium {
+ 
+  android {
+   appFileName="ee.ria.libdigidocpp4.apk"
+   appId="ee.ria.libdigidocpp"
+   mainActivity="ee.ria.libdigidocpp.MainActivity"
+   automationName="UiAutomator2"
+  }
+  ios {
+ 
+  }
+}
+
+testParameters {
+	libLogFileName="digidocpp.log"
+	# App validation result
+	resultsFileName="result.json"
+	# Signature files location
+	dataFilesDirectory="dataFiles"
+	# Result files location
+	resultFilesDirectory="results"
+	# Validation timeOut in seconds
+	validationTimeOut=100
+	validationFilesDirectory="validationFiles"
+	testResultsDirectory="results/testResults"
+}

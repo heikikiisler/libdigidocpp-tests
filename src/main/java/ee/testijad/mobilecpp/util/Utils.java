@@ -26,7 +26,7 @@ public class Utils {
     public static void downloadFileFromAndroid(String fileName){
         long epoch = System.currentTimeMillis() / 1000;
         String timePart = Long.toString(epoch);
-        String commandString = String.format("adb pull /sdcard/%s results/%s-%s", fileName, timePart, fileName);
+        String commandString = String.format("adb pull /sdcard/%s %s/%s-%s", fileName, Config.RESULT_FILES_DIRECTORY ,timePart, fileName);
         execCommand(commandString);
     }
 
@@ -51,7 +51,7 @@ public class Utils {
     }
 
     public static void copyFileToAndroid(String fileName) {
-        String commandString = String.format("adb push dataFiles/%s /sdcard", fileName);
+        String commandString = String.format("adb push %s/%s /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
         execCommand(commandString);
     }
 

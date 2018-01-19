@@ -1,5 +1,6 @@
 package ee.testijad.mobilecpp.drivers;
 
+import ee.testijad.mobilecpp.util.Config;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
@@ -10,17 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MobileDrivers {
-    // TODO Add config parameters from properties file
     public static AppiumDriver getAndroidDriver(int port) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Android device");
-        capabilities.setCapability(MobileCapabilityType.APP, "ee.ria.libdigidocpp4.apk");
+        capabilities.setCapability(MobileCapabilityType.APP, Config.ANDROID_APP_FILE);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, "ee.ria.libdigidocpp.MainActivity");
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Config.ANDROID_MAIN_ACTIVITY);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
-        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2");
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.ANDROID_AUTOMATION_NAME);
         URL url = getServiceUrl(port);
         return new AndroidDriver(capabilities);
     }

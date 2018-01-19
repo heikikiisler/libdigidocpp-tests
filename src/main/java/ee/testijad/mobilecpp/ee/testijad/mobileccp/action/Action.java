@@ -1,5 +1,6 @@
 package ee.testijad.mobilecpp.ee.testijad.mobileccp.action;
 
+import ee.testijad.mobilecpp.util.Config;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
@@ -8,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Action {
-    static String locator = "ee.ria.libdigidocpp:id/content";
+    static String locator = String.format("%s:id/content", Config.ANDROID_APP_ID);
     static By by = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", locator));
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
