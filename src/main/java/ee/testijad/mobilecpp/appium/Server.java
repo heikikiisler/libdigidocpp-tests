@@ -10,14 +10,14 @@ public class Server {
     private AppiumServiceBuilder appiumServiceBuilder;
     private AppiumDriverLocalService appiumService;
 
-    public Server() {
-        startServer();
+    public Server(int port) {
+        startServer(port);
     }
 
-    private void startServer() {
+    private void startServer(int port) {
         appiumServiceBuilder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
-                .usingPort(Utils.getFreePort())
+                .usingPort(port)
                 .withArgument(GeneralServerFlag.LOG_LEVEL, "info")
                 .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(Utils.getFreePort()))
                 .withArgument(GeneralServerFlag.LOG_TIMESTAMP)

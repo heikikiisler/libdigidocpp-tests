@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -25,8 +26,11 @@ public class Utils {
     public static void downloadFileFromAndroid(String fileName){
         long epoch = System.currentTimeMillis() / 1000;
         String timePart = Long.toString(epoch);
-
         String commandString = String.format("adb pull /sdcard/%s results/%s-%s", fileName, timePart, fileName);
+        execCommand(commandString);
+    }
+
+    private static void execCommand(String commandString) {
         List<String> output = new ArrayList<>();
         try {
             Process process = Runtime.getRuntime().exec(commandString);
@@ -34,13 +38,31 @@ public class Utils {
             String result;
             while ((result = reader.readLine()) != null) {
                 output.add(result);
-                System.out.println(result);
+                System.out.println(String.format("[COMMAND] %s", result));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static void deleteFileFromAndroid(String fileName) {
+        String commandString = String.format("adb shell rm -f /sdcard/%s", fileName);
+        execCommand(commandString);
+    }
 
+    public static void copyFileToAndroid(String fileName) {
+        String commandString = String.format("adb push dataFiles/%s /sdcard", fileName);
+        execCommand(commandString);
+    }
 
+    public static void copyAllDataFiles(String directory) {
+        File folder = new File(directory);
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                copyFileToAndroid( listOfFiles[i].getName());
+            }
+        }
+    }
 }

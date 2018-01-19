@@ -2,31 +2,31 @@ package ee.testijad.mobilecpp.tests;
 
 import ee.testijad.mobilecpp.appium.Server;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
+import ee.testijad.mobilecpp.ee.testijad.mobileccp.action.Action;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import org.testng.annotations.*;
 
 public class ValidationTests {
     Server appiumServer;
+    int communicationPort = Utils.getFreePort();
     @BeforeClass
     public void setUp() {
         System.out.println("Before class");
         // Start server
-        appiumServer = new Server();
+        appiumServer = new Server(communicationPort);
     }
 
     @Test
     public void androidValidation() {
         System.out.println("Action");
-        AppiumDriver driver = MobileDrivers.getAndroidDriver();
-        try {
-            Thread.sleep(30000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Utils.deleteFileFromAndroid("result.json");
+        Utils.deleteFileFromAndroid("digidocpp.log");
+        Utils.copyAllDataFiles("dataFiles");
+        AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
+        Action.waitForResult(driver, 100);
         Utils.downloadFileFromAndroid("result.json");
         Utils.downloadFileFromAndroid("digidocpp.log");
-
     }
 
     @AfterClass
