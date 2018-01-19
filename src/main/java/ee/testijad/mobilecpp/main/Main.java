@@ -2,7 +2,7 @@ package ee.testijad.mobilecpp.main;
 
 import ee.testijad.mobilecpp.appium.Server;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
-import ee.testijad.mobilecpp.ee.testijad.mobileccp.action.Action;
+import ee.testijad.mobilecpp.action.Action;
 import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;

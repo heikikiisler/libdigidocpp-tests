@@ -1,4 +1,4 @@
-package ee.testijad.mobilecpp.ee.testijad.mobileccp.action;
+package ee.testijad.mobilecpp.action;
 
 import ee.testijad.mobilecpp.util.Config;
 import io.appium.java_client.AppiumDriver;
@@ -14,12 +14,12 @@ public class Action {
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
         try {
-            Thread.sleep(15000L);
+            Thread.sleep(25000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (timeoutInSeconds > 15) {
-            timeoutInSeconds = timeoutInSeconds - 15;
+        if (timeoutInSeconds > 25) {
+            timeoutInSeconds = timeoutInSeconds - 25;
         }
         try {
             new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(by));
