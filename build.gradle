@@ -19,6 +19,12 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 }
 
+task generateValidationSuite(type: JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = "ee.testijad.mobilecpp.tests.GenerateSuite"
+    outputs.upToDateWhen {false}
+}
+
 task validateFilesWithAndroidLib(type: Test) {
 
  useTestNG()
