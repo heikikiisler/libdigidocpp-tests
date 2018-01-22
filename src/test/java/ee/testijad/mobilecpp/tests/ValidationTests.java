@@ -43,6 +43,26 @@ public class ValidationTests {
         Utils.downloadFileFromAndroid(Config.LIB_LOG_FILE);
     }
 
+    @Test(enabled = false)
+    public void iosValidation() {
+        System.out.println("Action");
+        // TODO 22.01.2018 clean device before test
+        // TODO 22.01.2018 copy files for validation
+
+        Instant start, end;
+        double gap = 0;
+        start = Instant.now();
+        AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
+        // TODO 22.01.2018 Need to poll completed flag
+        end = Instant.now();
+        if (start != null) {
+            gap = ((double) ChronoUnit.MILLIS.between(start, end))/1000;
+        }
+        System.out.println(String.format("Working time: %.3f seconds ", gap));
+        // TODO 22.01.2018 Copy log files from device
+    }
+
+
     @AfterClass
     public void teardown() {
         System.out.println("After");

@@ -26,6 +26,12 @@ public class Config {
     public static final String ANDROID_MAIN_ACTIVITY = CONFIG.getString("appium.android.mainActivity");
     public static final String ANDROID_AUTOMATION_NAME = CONFIG.getString("appium.android.automationName");
 
+    // Ios parameters
+    public static final String IOS_BUNDLE_ID = CONFIG.getString("appium.ios.bundleId");
+    public static final String IOS_APP_FILE = CONFIG.getString("appium.ios.appFileName");
+
+    public static final String IOS_AUTOMATION_NAME = CONFIG.getString("appium.ios.automationName");
+
     private static com.typesafe.config.Config getConfig() {
         File configFile = new File("properties.conf");
         com.typesafe.config.Config config = ConfigFactory.parseFile(configFile);

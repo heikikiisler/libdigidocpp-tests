@@ -9,7 +9,13 @@ appium {
    automationName="UiAutomator2"
   }
   ios {
- 
+     appFileName="ee.ria.libdigidocpp-ios.ipa"
+     bundleId="ee.ria.libdigidocpp-ios"
+     automationName="XCUITest"
+     xcode {
+       showLog=true
+       orgID="ABCD1234"
+     }
   }
 }
 

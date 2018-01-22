@@ -19,6 +19,11 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 }
 
+def buildProperties = new Properties()
+file("properties.conf").withInputStream {
+    stream -> buildProperties.load(stream)
+}
+
 task generateValidationSuite(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = "ee.testijad.mobilecpp.tests.GenerateSuite"
@@ -27,11 +32,21 @@ task generateValidationSuite(type: JavaExec) {
 
 task validateFilesWithAndroidLib(type: Test) {
 
- useTestNG()
- outputs.upToDateWhen {false}
+     useTestNG() {
+         // TODO 22.01.2018 Add complete flow with TestNG xml file
+       //  suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
+     }
+     outputs.upToDateWhen {false}
 }
 
+task validateFilesWithIosLib(type: Test) {
 
+    useTestNG() {
+        // TODO 22.01.2018 Add complete flow with TestNG xml file
+        //  suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
+    }
+    outputs.upToDateWhen {false}
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
