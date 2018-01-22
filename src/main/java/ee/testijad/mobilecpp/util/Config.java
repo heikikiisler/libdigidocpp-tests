@@ -13,6 +13,7 @@ public class Config {
     public static final String DATA_FILES_DIRECTORY = CONFIG.getString("testParameters.dataFilesDirectory");
     public static final String RESULT_FILES_DIRECTORY = CONFIG.getString("testParameters.resultFilesDirectory");
     public static final String VALIDATION_FILES_DIRECTORY = CONFIG.getString("testParameters.validationFilesDirectory");
+    public static final String TEST_SUITE_FILE_DIRECTORY = CONFIG.getString("testParameters.testSuiteFileDirectory");
     public static final String TEST_RESULTS_DIRECTORY = CONFIG.getString("testParameters.testResultsDirectory");
 
     public static final String LIB_LOG_FILE = CONFIG.getString("testParameters.libLogFileName");

@@ -19,6 +19,8 @@ testParameters {
 	resultsFileName="result.json"
 	# Signature files location
 	dataFilesDirectory="dataFiles"
+    # TestNG test suite file location
+    testSuiteFileDirectory="src/test/resources/test.xml"
 	# Result files location
 	resultFilesDirectory="results"
 	# Validation timeOut in seconds
