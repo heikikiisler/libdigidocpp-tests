@@ -13,8 +13,8 @@ import java.time.temporal.ChronoUnit;
 
 public class ValidationTests {
 
-    Server appiumServer;
-    int communicationPort = Utils.getFreePort();
+    private Server appiumServer;
+    private int communicationPort = Utils.getFreePort();
 
     @BeforeClass
     public void setUp() {

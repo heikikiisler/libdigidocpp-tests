@@ -96,8 +96,7 @@ Automated tests for libdigidocpp mobile library
 
 ## Running tests
 
-* Copy "properties.conf.sample" into new file in root directory named "properties.conf".
-* Connect single device through USB (Allow USB debugging from device settings) or start emulators.
+* Connect single device through USB (Allow USB debugging from device settings).
 * Optional: Verify that devices are connected with the command `adb devices`. The output should
   include a list of connected devices with "device" after the UDID.
 * Navigate to project root directory

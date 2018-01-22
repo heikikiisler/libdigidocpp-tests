@@ -1,8 +1,10 @@
 package ee.testijad.mobilecpp.util;
 
 import com.typesafe.config.ConfigFactory;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Config {
     private static final com.typesafe.config.Config CONFIG = getConfig();
@@ -24,9 +26,15 @@ public class Config {
     public static final String ANDROID_AUTOMATION_NAME = CONFIG.getString("appium.android.automationName");
 
     private static com.typesafe.config.Config getConfig() {
-        com.typesafe.config.Config config = ConfigFactory.parseFile(new File("properties.conf"));
+        File configFile = new File("properties.conf");
+        com.typesafe.config.Config config = ConfigFactory.parseFile(configFile);
         if (config.isEmpty()) {
-            throw new IllegalArgumentException("properties.conf file is missing!");
+            try {
+                System.out.println("Config not set up in \"properties.conf\". Copying from \"properties.conf.sample\"");
+                FileUtils.copyFile(new File("properties.conf.sample"), configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return config;
     }
