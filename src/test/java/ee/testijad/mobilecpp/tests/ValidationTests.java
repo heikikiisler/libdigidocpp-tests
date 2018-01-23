@@ -1,74 +1,22 @@
 package ee.testijad.mobilecpp.tests;
 
-import ee.testijad.mobilecpp.appium.Server;
-import ee.testijad.mobilecpp.drivers.MobileDrivers;
-import ee.testijad.mobilecpp.action.Action;
-import ee.testijad.mobilecpp.util.Config;
-import ee.testijad.mobilecpp.util.Utils;
-import io.appium.java_client.AppiumDriver;
-import org.testng.annotations.*;
+import ee.testijad.mobilecpp.validation.ResultsParser;
+import ee.testijad.mobilecpp.validation.TestFile;
+import ee.testijad.mobilecpp.validation.ValidationFiles;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import static org.testng.Assert.assertEquals;
 
 public class ValidationTests {
 
-    private Server appiumServer;
-    private int communicationPort = Utils.getFreePort();
-
-    @BeforeClass
-    public void setUp() {
-        System.out.println("Before class");
-        // Start server
-        appiumServer = new Server(communicationPort);
-    }
+    private static ResultsParser resultsParser = ResultsParser.getLatest();
 
     @Test
-    public void androidValidation() {
-        System.out.println("Action");
-        Utils.deleteFileFromAndroid(Config.RESULTS_FILE);
-        Utils.deleteFileFromAndroid(Config.LIB_LOG_FILE);
-        Utils.copyAllDataFiles(Config.DATA_FILES_DIRECTORY);
-        Instant start, end;
-        double gap = 0;
-        start = Instant.now();
-        AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
-        Action.waitForResult(driver, Config.VALIDATION_TIMEOUT);
-        end = Instant.now();
-        if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end))/1000;
-        }
-        System.out.println(String.format("Working time: %.3f seconds ", gap));
-        Utils.downloadFileFromAndroid(Config.RESULTS_FILE);
-        Utils.downloadFileFromAndroid(Config.LIB_LOG_FILE);
+    @Parameters({"fileName"})
+    public void validateTestFile(String fileName) {
+        TestFile expected = ValidationFiles.getExpectedTestFile(fileName);
+        assertEquals(expected.getExpectedResult(), resultsParser.getTestFileResult(expected));
     }
 
-    @Test(enabled = false)
-    public void iosValidation() {
-        System.out.println("Action");
-        // TODO 22.01.2018 clean device before test
-        // TODO 22.01.2018 copy files for validation
-
-        Instant start, end;
-        double gap = 0;
-        start = Instant.now();
-        AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
-        // TODO 22.01.2018 Need to poll completed flag
-        end = Instant.now();
-        if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end))/1000;
-        }
-        System.out.println(String.format("Working time: %.3f seconds ", gap));
-        // TODO 22.01.2018 Copy log files from device
-    }
-
-
-    @AfterClass
-    public void teardown() {
-        System.out.println("After");
-        // Stop server
-        if (appiumServer != null) {
-            appiumServer.stopServer();
-        }
-    }
 }

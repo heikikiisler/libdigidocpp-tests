@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class XmlFileBuilder {
+
     public static void generateTestSuite(String directory, String className) {
         XmlSuite suite = new XmlSuite();
         suite.setName("Data files validation suite");
@@ -26,22 +27,21 @@ public class XmlFileBuilder {
         String fileName;
         while (myFiles.hasNext()) {
             fileName = myFiles.next().getName();
-           // System.out.println(String.format("File name: %s", fileName));
+            // System.out.println(String.format("File name: %s", fileName));
             XmlTest myTest = new XmlTest(suite);
             myTest.setName(fileName);
             myTest.addParameter("fileName", fileName);
             List<XmlClass> xmlClasses = new ArrayList<>();
             XmlClass clazz = new XmlClass(className, false);
             List<XmlInclude> xmlInclude = new ArrayList<>();
-            xmlInclude.add(0, new XmlInclude("androidValidation"));
+            xmlInclude.add(0, new XmlInclude("validateTestFile"));
             clazz.setIncludedMethods(xmlInclude);
             xmlClasses.add(clazz);
             myTest.setXmlClasses(xmlClasses);
         }
         System.out.println(suite.toXml());
-        saveSuiteFile(suite, Config.TEST_SUITE_FILE_DIRECTORY );
+        saveSuiteFile(suite, Config.TEST_SUITE_FILE_DIRECTORY);
     }
-
 
     private static Iterator<File> fileListBuilder(String directory) {
         File folder = new File(directory);
@@ -52,9 +52,9 @@ public class XmlFileBuilder {
             e.printStackTrace();
         }
         IOFileFilter filter = new SuffixFileFilter(extensions, IOCase.INSENSITIVE);
-        Iterator<File> iterator = FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
-        return iterator;
+        return FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
     }
+
     public static void saveSuiteFile(XmlSuite suite, String filePath) {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
@@ -66,4 +66,5 @@ public class XmlFileBuilder {
             e.printStackTrace();
         }
     }
+
 }

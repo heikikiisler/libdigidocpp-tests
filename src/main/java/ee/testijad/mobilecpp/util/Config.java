@@ -12,7 +12,7 @@ public class Config {
     // Test parameters
     public static final String DATA_FILES_DIRECTORY = CONFIG.getString("testParameters.dataFilesDirectory");
     public static final String RESULT_FILES_DIRECTORY = CONFIG.getString("testParameters.resultFilesDirectory");
-    public static final String TEST_SUITE_FILE_DIRECTORY = CONFIG.getString("testParameters.testSuiteFileDirectory");
+    public static final String TEST_SUITE_FILE_DIRECTORY = CONFIG.getString("testSuiteFileDirectory");
     public static final String VALIDATION_WARNING_FILE_PATH =
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationWarningFileName");
     public static final String VALIDATION_ERROR_FILE_PATH =

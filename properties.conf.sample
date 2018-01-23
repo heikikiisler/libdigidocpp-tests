@@ -18,18 +18,19 @@ appium {
   }
 }
 
+# TestNG test suite file location
+testSuiteFileDirectory="src/test/resources/test.xml"
+
 testParameters {
   libLogFileName="digidocpp.log"
   # App validation result
   resultsFileName="result.json"
   # Signature files location
   dataFilesDirectory="dataFiles"
-  # TestNG test suite file location
-  testSuiteFileDirectory="src/test/resources/test.xml"
   # Result files location
   resultFilesDirectory="results"
   # Validation timeOut in seconds
-  validationTimeOut=100
+  validationTimeOut=300
   validationWarningFileName="valid_files.txt"
   validationErrorFileName="faulty_files.txt"
   testResultsDirectory="results/testResults"

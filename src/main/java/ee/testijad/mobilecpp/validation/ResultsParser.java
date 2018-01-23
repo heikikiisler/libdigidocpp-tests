@@ -2,11 +2,17 @@ package ee.testijad.mobilecpp.validation;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResultsParser {
 
@@ -22,13 +28,26 @@ public class ResultsParser {
         }
     }
 
-    private ResultType getResultByTestFile(TestFile testFile) {
+    public static ResultsParser getLatest() {
+        File folder = new File(Config.RESULT_FILES_DIRECTORY);
+        String extension = "json";
+        IOFileFilter filter = new SuffixFileFilter(extension, IOCase.INSENSITIVE);
+        Iterator<File> files = FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
+        List<String> fileNames = new ArrayList<>();
+        files.forEachRemaining(file -> fileNames.add(file.getName()));
+        Collections.sort(fileNames);
+        String latestResultsFileName = fileNames.get(fileNames.size() - 1);
+        System.out.println("Using results from " + latestResultsFileName);
+        return new ResultsParser(String.format("%s/%s", Config.RESULT_FILES_DIRECTORY, latestResultsFileName));
+    }
+
+    public ResultType getTestFileResult(TestFile testFile) {
         for (Map<String, String> result : results) {
             if (result.get("f").equals(testFile.getFileName())) {
                 return ResultType.get(result.get("s"));
             }
         }
-        throw new RuntimeException("Could not find test file " + testFile.getFileName());
+        throw new RuntimeException(String.format("Could not find test file \"%s\" from results", testFile.getFileName()));
     }
 
 }

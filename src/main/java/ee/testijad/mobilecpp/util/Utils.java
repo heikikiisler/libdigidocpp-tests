@@ -25,10 +25,12 @@ public class Utils {
         return port;
     }
 
-    public static void downloadFileFromAndroid(String fileName){
+    public static void downloadFileFromAndroid(String fileName) {
         long epoch = System.currentTimeMillis() / 1000;
         String timePart = Long.toString(epoch);
-        String commandString = String.format("adb pull /sdcard/%s %s/%s-%s", fileName, Config.RESULT_FILES_DIRECTORY ,timePart, fileName);
+        String sourcePath = String.format("/sdcard/%s", fileName);
+        String targetPath = String.format("%s/%s-%s", Config.RESULT_FILES_DIRECTORY, timePart, fileName);
+        String commandString = String.format("adb pull \"%s\" \"%s\"", sourcePath, targetPath);
         execCommand(commandString);
     }
 
@@ -48,12 +50,12 @@ public class Utils {
     }
 
     public static void deleteFileFromAndroid(String fileName) {
-        String commandString = String.format("adb shell rm -f /sdcard/%s", fileName);
+        String commandString = String.format("adb shell rm -f \"/sdcard/%s\"", fileName);
         execCommand(commandString);
     }
 
     public static void copyFileToAndroid(String fileName) {
-        String commandString = String.format("adb push %s/%s /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
+        String commandString = String.format("adb push \"%s/%s\" /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
         execCommand(commandString);
     }
 

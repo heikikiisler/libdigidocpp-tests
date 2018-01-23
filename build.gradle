@@ -25,28 +25,35 @@ file("properties.conf").withInputStream {
     stream -> buildProperties.load(stream)
 }
 
-task generateValidationSuite(type: JavaExec) {
+task generateSuite(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = "ee.testijad.mobilecpp.tests.GenerateSuite"
     outputs.upToDateWhen {false}
 }
 
-task validateFilesWithAndroidLib(type: Test) {
-
-     useTestNG() {
-         // TODO 22.01.2018 Add complete flow with TestNG xml file
-       //  suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
-     }
-     outputs.upToDateWhen {false}
+task validateWithAndroid(type: JavaExec) {
+    doFirst {
+        systemProperty 'mobilecpp.os', 'android'
+    }
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ee.testijad.mobilecpp.app.RunApps"
+    outputs.upToDateWhen {false}
 }
 
-task validateFilesWithIosLib(type: Test) {
-
-    useTestNG() {
-        // TODO 22.01.2018 Add complete flow with TestNG xml file
-        //  suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
+task validateWithIos(type: JavaExec) {
+    doFirst {
+        systemProperty 'mobilecpp.os', 'ios'
     }
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ee.testijad.mobilecpp.app.RunApps"
     outputs.upToDateWhen {false}
+}
+
+task validationTest(type: Test) {
+    useTestNG() {
+        suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
+        useDefaultListeners = true
+    }
 }
 
 task wrapper(type: Wrapper) {

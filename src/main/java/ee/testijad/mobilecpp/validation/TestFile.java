@@ -10,8 +10,12 @@ public class TestFile {
 
     public TestFile(String fileName, ResultType expectedResult, List<String> expectedWarnings) {
         this.fileName = fileName;
-        this.expectedWarnings = expectedWarnings;
         this.expectedResult = expectedResult;
+        this.expectedWarnings = expectedWarnings;
+    }
+
+    public static TestFile getWithoutWarnings(String fileName) {
+        return new TestFile(fileName, ResultType.OK, null);
     }
 
     public String getFileName() {
@@ -25,4 +29,12 @@ public class TestFile {
     public List<String> getExpectedWarnings() {
         return expectedWarnings;
     }
+
+    public boolean equals(TestFile testFile) {
+        return fileName.equals(testFile.fileName) &&
+               expectedResult == testFile.expectedResult &&
+               expectedWarnings.containsAll(testFile.expectedWarnings) &&
+               testFile.expectedWarnings.containsAll(expectedWarnings);
+    }
+
 }
