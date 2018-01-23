@@ -17,6 +17,7 @@ dependencies {
 	compile group: 'io.appium', name: 'java-client', version: '5.0.4'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+
 }
 
 def buildProperties = new Properties()

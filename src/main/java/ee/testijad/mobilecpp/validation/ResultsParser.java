@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,18 +22,10 @@ public class ResultsParser {
         }
     }
 
-    public boolean expectedMatchesDetected(TestFile testFile) {
-        List<ResultType> result = getResultByTestFile(testFile);
-        return testFile.getExpectedWarnings().containsAll(result) &&
-               result.containsAll(testFile.getExpectedWarnings());
-    }
-
-    private List<ResultType> getResultByTestFile(TestFile testFile) {
-        List<ResultType> resultTypes = new ArrayList<>();
+    private ResultType getResultByTestFile(TestFile testFile) {
         for (Map<String, String> result : results) {
             if (result.get("f").equals(testFile.getFileName())) {
-                resultTypes.add(ResultType.get(result.get("s")));
-                return resultTypes;
+                return ResultType.get(result.get("s"));
             }
         }
         throw new RuntimeException("Could not find test file " + testFile.getFileName());

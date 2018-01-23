@@ -1,7 +1,6 @@
 
 # Appium related configuration
 appium {
- 
   android {
    appFileName="ee.ria.libdigidocpp4.apk"
    appId="ee.ria.libdigidocpp"
@@ -9,28 +8,29 @@ appium {
    automationName="UiAutomator2"
   }
   ios {
-     appFileName="ee.ria.libdigidocpp-ios.ipa"
-     bundleId="ee.ria.libdigidocpp-ios"
-     automationName="XCUITest"
-     xcode {
-       showLog=true
-       orgID="ABCD1234"
-     }
+    appFileName="ee.ria.libdigidocpp-ios.ipa"
+    bundleId="ee.ria.libdigidocpp-ios"
+    automationName="XCUITest"
+    xcode {
+      showLog=true
+      orgID="ABCD1234"
+    }
   }
 }
 
 testParameters {
-	libLogFileName="digidocpp.log"
-	# App validation result
-	resultsFileName="result.json"
-	# Signature files location
-	dataFilesDirectory="dataFiles"
-    # TestNG test suite file location
-    testSuiteFileDirectory="src/test/resources/test.xml"
-	# Result files location
-	resultFilesDirectory="results"
-	# Validation timeOut in seconds
-	validationTimeOut=100
-	validationFilesDirectory="validationFiles"
-	testResultsDirectory="results/testResults"
+  libLogFileName="digidocpp.log"
+  # App validation result
+  resultsFileName="result.json"
+  # Signature files location
+  dataFilesDirectory="dataFiles"
+  # TestNG test suite file location
+  testSuiteFileDirectory="src/test/resources/test.xml"
+  # Result files location
+  resultFilesDirectory="results"
+  # Validation timeOut in seconds
+  validationTimeOut=100
+  validationWarningFileName="valid_files.txt"
+  validationErrorFileName="faulty_files.txt"
+  testResultsDirectory="results/testResults"
 }
