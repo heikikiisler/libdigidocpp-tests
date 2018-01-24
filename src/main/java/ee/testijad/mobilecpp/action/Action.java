@@ -10,22 +10,20 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Action {
 
-    private static final String locator = String.format("%s:id/content", Config.ANDROID_APP_ID);
-    private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", locator));
+    private static final String LOCATOR = String.format("%s:id/content", Config.ANDROID_APP_ID);
+    private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", LOCATOR));
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
         try {
-            Thread.sleep(25000L);
+            Thread.sleep(100000L);
+            // TODO: 24.01.2018 Fix timeout errors with adb communication and remove hardcoded timeout
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         if (timeoutInSeconds > 25) {
-            timeoutInSeconds = timeoutInSeconds - 25;
+            timeoutInSeconds -= 25;
         }
-        try {
-            new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(TEXT_VIEW));
-        } catch (Exception e) {
-        }
+        new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(TEXT_VIEW));
         MobileElement element = (MobileElement) driver.findElement(TEXT_VIEW);
         if (element.getText().contains("DONE")) {
             System.out.println("All files processed");
