@@ -9,8 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Action {
-    static String locator = String.format("%s:id/content", Config.ANDROID_APP_ID);
-    static By by = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", locator));
+
+    private static final String locator = String.format("%s:id/content", Config.ANDROID_APP_ID);
+    private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", locator));
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
         try {
@@ -22,11 +23,11 @@ public class Action {
             timeoutInSeconds = timeoutInSeconds - 25;
         }
         try {
-            new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(by));
+            new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(TEXT_VIEW));
         } catch (Exception e) {
         }
-        MobileElement element = (MobileElement) driver.findElement(by);
-        if(element.getText().contains("DONE")) {
+        MobileElement element = (MobileElement) driver.findElement(TEXT_VIEW);
+        if (element.getText().contains("DONE")) {
             System.out.println("All files processed");
         } else {
             System.out.println(String.format("Not all files processed. Actual result: %s", element.getText()));

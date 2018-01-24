@@ -7,7 +7,7 @@ import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
 public class Server {
-    private AppiumServiceBuilder appiumServiceBuilder;
+
     private AppiumDriverLocalService appiumService;
 
     public Server(int port) {
@@ -15,7 +15,7 @@ public class Server {
     }
 
     private void startServer(int port) {
-        appiumServiceBuilder = new AppiumServiceBuilder()
+        AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
                 .usingPort(port)
                 .withArgument(GeneralServerFlag.LOG_LEVEL, "info")

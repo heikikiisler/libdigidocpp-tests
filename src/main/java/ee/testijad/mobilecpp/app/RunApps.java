@@ -31,11 +31,10 @@ public class RunApps {
     }
 
     public static void setUp() {
-        // Start server
         appiumServer = new Server(communicationPort);
     }
 
-    public static void runAndroidApp() {
+    private static void runAndroidApp() {
         System.out.println("Action");
         Utils.deleteFileFromAndroid(Config.RESULTS_FILE);
         Utils.deleteFileFromAndroid(Config.LIB_LOG_FILE);
@@ -47,14 +46,14 @@ public class RunApps {
         Action.waitForResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end))/1000;
+            gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
         Utils.downloadFileFromAndroid(Config.RESULTS_FILE);
         Utils.downloadFileFromAndroid(Config.LIB_LOG_FILE);
     }
 
-    public static void runIosApp() {
+    private static void runIosApp() {
         System.out.println("Action");
         // TODO 22.01.2018 clean device before test
         // TODO 22.01.2018 copy files for validation
@@ -66,13 +65,13 @@ public class RunApps {
         // TODO 22.01.2018 Need to poll completed flag
         end = Instant.now();
         if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end))/1000;
+            gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
         // TODO 22.01.2018 Copy log files from device
     }
 
-    public static void teardown() {
+    private static void teardown() {
         System.out.println("After");
         // Stop server
         if (appiumServer != null) {

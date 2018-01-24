@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Config {
+
     private static final com.typesafe.config.Config CONFIG = getConfig();
 
     // Test parameters

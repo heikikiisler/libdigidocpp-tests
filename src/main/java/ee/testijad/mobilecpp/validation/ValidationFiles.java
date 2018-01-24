@@ -34,7 +34,7 @@ public class ValidationFiles {
     }
 
     public static void addValidationFile(String fileName, ResultType resultType) {
-        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (!line.startsWith("#") && line.contains(SEPARATOR)) {
@@ -49,6 +49,5 @@ public class ValidationFiles {
             e.printStackTrace();
         }
     }
-
 
 }

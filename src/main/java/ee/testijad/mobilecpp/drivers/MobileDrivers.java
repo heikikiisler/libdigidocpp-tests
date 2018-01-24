@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MobileDrivers {
+
     public static AppiumDriver getAndroidDriver(int port) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "");
@@ -35,8 +36,8 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.IOS);
         capabilities.setCapability(MobileCapabilityType.UDID, "0BE05697-763C-4611-87E5-DC488FC3CC26");
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "IOS device");
-      //  capabilities.setCapability(MobileCapabilityType.APP, Config.IOS_APP_FILE);
-        capabilities.setCapability(IOSMobileCapabilityType.BUNDLE_ID,Config.IOS_BUNDLE_ID);
+        //  capabilities.setCapability(MobileCapabilityType.APP, Config.IOS_APP_FILE);
+        capabilities.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Config.IOS_BUNDLE_ID);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
