@@ -66,6 +66,15 @@ public class HttpServer {
             }
             if (!request.startsWith("GET") || request.length() < 14 ||
                     !(request.endsWith("HTTP/1.0") || request.endsWith("HTTP/1.1"))) {
+                if(request.startsWith("PUT") & request.length() > 14 & (request.endsWith("HTTP/1.0") || request.endsWith("HTTP/1.1"))) {
+                    System.out.println("Processing PUT request");
+                    String filePath = request.substring(5, request.length() - 9).trim();
+                    // TODO Add PUT action here
+
+
+                    errorReport(pout, s, "400", "Bad Request",
+                            "PUT message body is missing");
+                }
                 // bad request
                 errorReport(pout, s, "400", "Bad Request",
                         "Your browser sent a request that " +
