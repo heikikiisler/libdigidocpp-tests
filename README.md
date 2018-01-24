@@ -1,6 +1,6 @@
 # libdigidocpp library tests
 
-Automated tests for libdigidocpp mobile library
+Automated tests for the [libdigidocpp mobile library](https://github.com/metsma/libdigidocpp).
 
 ## Prerequisites
 - Use real Android or iOS phone.
@@ -109,14 +109,39 @@ Automated tests for libdigidocpp mobile library
 
 _These commands will install the corresponding app and run tests on all connected devices._
 
-Run tests:
 
-    ./gradlew validateFilesWithAndroidLib --info
+Validate files on an Android device:
+
+    ./gradlew validateWithAndroid --info
+
+Validate files on an iOS device:
+
+    ./gradlew validateWithIos --info
+
+Generate TestNG XML file :
+
+    ./gradlew generateSuite --info
+
+Run the validation tests:
+
+_This will compare a result JSON file from the resultFilesDirectory defined in Config.
+To compare with a specific file in the resultFilesDirectory, add a parameter:
+-PresultsFile="resultsFileName". The latest results file is used by default._
+
+    ./gradlew validationTest --info
+
+or
+
+    ./gradlew validationTest --info -PresultsFile="resultsFileName"
+
+Run everything together:
+
+    ./gradlew validateWithAndroid generateSuite validationTest --info
 
 
 **Test reports**
-TODO
 
+Test report path will be printed after executing tests,  `build/reports/tests/validationTest/index.html` by default.
 
 
 ### Changelog
