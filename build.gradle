@@ -25,6 +25,18 @@ file("properties.conf").withInputStream {
     stream -> buildProperties.load(stream)
 }
 
+task prepareValidationZipFile(type: Zip) {
+    from 'dataFiles'
+    include '*'
+    exclude '*.txt'
+    exclude '*.zip'
+    exclude '*.log'
+    exclude '*.json'
+    archiveName 'validationFiles.zip'
+    destinationDir(file('download'))
+    outputs.upToDateWhen {false}
+}
+
 task generateSuite(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = "ee.testijad.mobilecpp.tests.GenerateSuite"
