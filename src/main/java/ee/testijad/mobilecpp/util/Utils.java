@@ -55,7 +55,7 @@ public class Utils {
     }
 
     public static void copyFileToAndroid(String fileName) {
-        String commandString = String.format("adb push \"%s/%s\" /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
+        String commandString = String.format("adb push \"%s/%s\" \"/sdcard\"", Config.DATA_FILES_DIRECTORY, fileName);
         execCommand(commandString);
     }
 
