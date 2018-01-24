@@ -1,6 +1,6 @@
 # libdigidocpp library tests
 
-Automated tests for the [libdigidocpp mobile library](https://github.com/metsma/libdigidocpp).
+Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) mobile library.
 
 ## Prerequisites
 - Use real Android or iOS phone.
