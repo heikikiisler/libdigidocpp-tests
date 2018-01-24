@@ -10,13 +10,13 @@ import static org.testng.Assert.assertEquals;
 
 public class ValidationTests {
 
-    private static ResultsParser resultsParser = ResultsParser.getLatest();
+    private static ResultsParser resultsParser = ResultsParser.getDefault();
 
     @Test
     @Parameters({"fileName"})
     public void validateTestFile(String fileName) {
         TestFile expected = ValidationFiles.getExpectedTestFile(fileName);
-        assertEquals(expected.getExpectedResult(), resultsParser.getTestFileResult(expected));
+        assertEquals(resultsParser.getTestFileResult(expected), expected.getExpectedResult());
     }
 
 }

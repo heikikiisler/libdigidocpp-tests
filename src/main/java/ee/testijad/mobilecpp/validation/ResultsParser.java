@@ -18,7 +18,7 @@ public class ResultsParser {
 
     private List<Map<String, String>> results;
 
-    public ResultsParser(String resultsFilePath) {
+    private ResultsParser(String resultsFilePath) {
         String contents = Utils.readFileIntoString(resultsFilePath);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -28,7 +28,15 @@ public class ResultsParser {
         }
     }
 
-    public static ResultsParser getLatest() {
+    public static ResultsParser getDefault() {
+        String resultsFileName = System.getProperty("mobilecpp.results-file");
+        if (resultsFileName == null) {
+            resultsFileName = getLatestResultsFileName();
+        }
+        return new ResultsParser(String.format("%s/%s", Config.RESULT_FILES_DIRECTORY, resultsFileName));
+    }
+
+    private static String getLatestResultsFileName() {
         File folder = new File(Config.RESULT_FILES_DIRECTORY);
         String extension = "json";
         IOFileFilter filter = new SuffixFileFilter(extension, IOCase.INSENSITIVE);
@@ -38,7 +46,7 @@ public class ResultsParser {
         Collections.sort(fileNames);
         String latestResultsFileName = fileNames.get(fileNames.size() - 1);
         System.out.println("Using results from " + latestResultsFileName);
-        return new ResultsParser(String.format("%s/%s", Config.RESULT_FILES_DIRECTORY, latestResultsFileName));
+        return latestResultsFileName;
     }
 
     public ResultType getTestFileResult(TestFile testFile) {

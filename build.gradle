@@ -50,6 +50,11 @@ task validateWithIos(type: JavaExec) {
 }
 
 task validationTest(type: Test) {
+    doFirst {
+        if (project.hasProperty('resultsFile')) {
+            systemProperty 'mobilecpp.results-file', project.property('resultsFile')
+        }
+    }
     useTestNG() {
         suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
         useDefaultListeners = true
