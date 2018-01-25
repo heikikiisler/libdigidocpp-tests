@@ -28,9 +28,8 @@ public class HttpRequestHandler implements Runnable {
                 if (misc == null || misc.length() == 0)
                     break;
             }
-            if (!request.startsWith("GET") || request.length() < 14 ||
-                !(request.endsWith("HTTP/1.0") || request.endsWith("HTTP/1.1"))) {
-                if(request.startsWith("PUT") & request.length() > 14 & (request.endsWith("HTTP/1.0") || request.endsWith("HTTP/1.1"))) {
+            if (!request.startsWith("GET") || request.length() < 14 || !request.endsWith("HTTP/1.1")) {
+                if(request.startsWith("PUT") & request.length() > 14 & request.endsWith("HTTP/1.1")) {
                     System.out.println("PUT request");
                     // TODO Add PUT action here
                     generateError(printStream, socket, "400", "Bad Request",
@@ -51,7 +50,7 @@ public class HttpRequestHandler implements Runnable {
                     try {
                         InputStream file = new FileInputStream(fileToSend);
                         printStream.print("HTTP/1.0 200 OK<br>" +
-                                   "Content-Type: " + guessContentType(fileRequest) + "<br>" +
+                                   "Content-Type: " + selectMimeType(fileRequest) + "<br>" +
                                    "Date: " + new Date() + "<br>" +
                                    "Server: HTTP Server 1.0<br><br>");
                         sendFile(file, out);
@@ -83,11 +82,12 @@ public class HttpRequestHandler implements Runnable {
         }
     }
 
-    private static String guessContentType(String path) {
+    private static String selectMimeType(String path) {
         if (path.endsWith(".zip")) {
             return "application/zip";
-        }
-        else {
+        } else if (path.endsWith(".json")) {
+            return "application/json";
+        } else {
             return "text/plain";
         }
     }
@@ -96,11 +96,11 @@ public class HttpRequestHandler implements Runnable {
                                       String code, String title, String message) {
         printStream.print("HTTP/1.0 " + code + " " + title + "\r\n" +
                           "\r\n" +
-                          "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n" +
-                          "<TITLE>" + code + " " + title + "</TITLE>\r\n" +
+                          "<!DOCTYPE HTML>\r\n" +
+                          "<TITLE>Server error</TITLE>\r\n" +
                           "</HEAD><BODY>\r\n" +
                           "<H1>" + title + "</H1>\r\n" + message + "<P>\r\n" +
-                          "<HR><ADDRESS>FileServer 1.0 at " +
+                          "<HR><ADDRESS>HTTP Server 1.0 at " +
                           connection.getLocalAddress().getHostName() +
                           " Port " + connection.getLocalPort() + "</ADDRESS>\r\n" +
                           "</BODY></HTML>\r\n");

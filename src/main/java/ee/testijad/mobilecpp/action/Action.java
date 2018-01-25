@@ -14,6 +14,7 @@ public class Action {
     private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", LOCATOR));
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
+        System.out.println(String.format("Timeout value %s", timeoutInSeconds));
         try {
             Thread.sleep(100000L);
             // TODO: 24.01.2018 Fix timeout errors with adb communication and remove hardcoded timeout
