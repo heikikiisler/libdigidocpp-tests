@@ -55,7 +55,7 @@ public class XmlFileBuilder {
         return FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
     }
 
-    public static void saveSuiteFile(XmlSuite suite, String filePath) {
+    private static void saveSuiteFile(XmlSuite suite, String filePath) {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
         try {
