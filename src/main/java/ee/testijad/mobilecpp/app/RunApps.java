@@ -1,7 +1,7 @@
 package ee.testijad.mobilecpp.app;
 
 import ee.testijad.mobilecpp.action.Action;
-import ee.testijad.mobilecpp.appium.Server;
+import ee.testijad.mobilecpp.appium.AppiumServer;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
 import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
@@ -9,10 +9,11 @@ import io.appium.java_client.AppiumDriver;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 public class RunApps {
 
-    private static Server appiumServer;
+    private static AppiumServer appiumServer;
     private static int communicationPort = Utils.getFreePort();
 
     public static void main(String[] args) {
@@ -31,7 +32,7 @@ public class RunApps {
     }
 
     public static void setUp() {
-        appiumServer = new Server(communicationPort);
+        appiumServer = new AppiumServer(communicationPort);
     }
 
     private static void runAndroidApp() {

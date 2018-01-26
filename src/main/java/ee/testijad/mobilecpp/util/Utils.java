@@ -25,7 +25,7 @@ public class Utils {
         return port;
     }
 
-    public static boolean isMac() {
+    private static boolean isMac() {
         return getOSName().contains("mac");
     }
 
@@ -43,14 +43,22 @@ public class Utils {
     }
 
     private static void execCommand(String commandString) {
-        List<String> output = new ArrayList<>();
+        System.out.println(String.format("[COMMAND] %s", commandString));
         try {
-            Process process = Runtime.getRuntime().exec(commandString);
+            Process process;
+            if (isMac()) {
+                List<String> commands = new ArrayList<>();
+                commands.add("/bin/sh");
+                commands.add("-c");
+                commands.add(commandString);
+                process = new ProcessBuilder(commands).start();
+            } else {
+                process = Runtime.getRuntime().exec(commandString);
+            }
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String result;
             while ((result = reader.readLine()) != null) {
-                output.add(result);
-                System.out.println(String.format("[COMMAND] %s", result));
+                System.out.println(String.format("[COMMAND RESULT] %s", result));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,11 +72,6 @@ public class Utils {
 
     private static void copyFileToAndroid(String fileName) {
         String commandString = String.format("adb push \"%s/%s\" /sdcard", Config.DATA_FILES_DIRECTORY,fileName);
-        if (isMac()) {
-            fileName = fileName.replace(" ", "\\ ");
-            commandString = String.format("adb push %s/%s /sdcard", Config.DATA_FILES_DIRECTORY,fileName);
-        }
-        System.out.println(commandString);
         execCommand(commandString);
     }
 
