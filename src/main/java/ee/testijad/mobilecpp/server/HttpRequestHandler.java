@@ -75,7 +75,7 @@ public class HttpRequestHandler implements Runnable {
                 } else {
                     try {
                         InputStream file = new FileInputStream(fileToSend);
-                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s; charset=utf-8\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n", selectMimeType(fileRequest), new Date()));
+                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileRequest), getTimeStamp()));
 
                         sendFile(file, out);
                     } catch (FileNotFoundException e) {
@@ -97,7 +97,7 @@ public class HttpRequestHandler implements Runnable {
 
     private static void sendFile(InputStream file, OutputStream out) {
         try {
-            byte[] buffer = new byte[2048];
+            byte[] buffer = new byte[1024*1024];
             while (file.available() > 0)
                 out.write(buffer, 0, file.read(buffer));
         } catch (IOException e) {
