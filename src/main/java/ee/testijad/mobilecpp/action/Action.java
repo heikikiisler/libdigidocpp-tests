@@ -43,4 +43,8 @@ public class Action {
         }
     }
 
+    public static void pasteHttpServerUrlAndRunValidation(String url) {
+        // TODO paste URL & Start button
+    }
+
 }

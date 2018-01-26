@@ -3,6 +3,7 @@ package ee.testijad.mobilecpp.app;
 import ee.testijad.mobilecpp.action.Action;
 import ee.testijad.mobilecpp.appium.AppiumServer;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
+import ee.testijad.mobilecpp.server.HttpServer;
 import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
@@ -56,20 +57,25 @@ public class RunApps {
 
     private static void runIosApp() {
         System.out.println("Action");
-        // TODO 22.01.2018 clean device before test
-        // TODO 22.01.2018 copy files for validation
-
         Instant start, end;
         double gap = 0;
         start = Instant.now();
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
-        // TODO 22.01.2018 Need to poll completed flag
+       // int httpServerPort = Utils.getFreePort();
+        int httpServerPort = 60974;
+        HttpServer server = new HttpServer(httpServerPort);
+        Thread thread = new Thread(server);
+        thread.start();
+        System.out.println("Started");
+        System.out.println(driver.getPageSource());
+        // TODO paste URL & Start button
+        Action.pasteHttpServerUrlAndRunValidation("URL");
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
-        // TODO 22.01.2018 Copy log files from device
+        server.stop();
     }
 
     private static void teardown() {
