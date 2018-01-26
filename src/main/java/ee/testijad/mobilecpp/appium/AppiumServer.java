@@ -6,11 +6,11 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
-public class Server {
+public class AppiumServer {
 
     private AppiumDriverLocalService appiumService;
 
-    public Server(int port) {
+    public AppiumServer(int port) {
         startServer(port);
     }
 
