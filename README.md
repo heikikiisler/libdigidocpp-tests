@@ -3,6 +3,7 @@
 Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) mobile library.
 
 ## Prerequisites
+
 - Use real Android or iOS phone.
 
 ### Linux
@@ -100,15 +101,24 @@ Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) m
 * Optional: Verify that devices are connected with the command `adb devices`. The output should
   include a list of connected devices with "device" after the UDID.
 * Navigate to project root directory
-* Copy correct apk file (Android) into project root directory and change app file name into properties.conf file
+* Copy correct app file into project root directory and change app file name in the properties.conf file
 * Copy files for validation into dataFiles directory
-* For Windows replace `./gradlew` with `gradlew.bat` in commands.
+* For Windows replace `./gradlew` with `gradlew` in commands.
 * Recommended: add flag `--info` for more logging output.
 
 **Commands**
 
-_These commands will install the corresponding app and run tests on all connected devices._
+_These commands will install the corresponding app and run tests on the connected device:_
 
+Android device:
+
+    ./gradlew androidTest --info
+
+iOS device(only on a Mac):
+
+    ./gradlew iosTest --info
+
+_More specific commands:_
 
 Validate files on an Android device:
 
@@ -142,7 +152,3 @@ Run everything together:
 **Test reports**
 
 Test report path will be printed after executing tests,  `build/reports/tests/validationTest/index.html` by default.
-
-
-### Changelog
-
