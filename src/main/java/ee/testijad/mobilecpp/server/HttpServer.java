@@ -17,6 +17,7 @@ public class HttpServer implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Starting HTTP server");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -26,9 +27,10 @@ public class HttpServer implements Runnable {
         while (!serverSocket.isClosed()) {
             try {
                 Socket connection = serverSocket.accept();
-                System.out.println(connection.getInetAddress().getCanonicalHostName());
+                System.out.println(connection.getInetAddress().getHostName());
                 System.out.println("Accepted connection");
-                new Thread(new HttpRequestHandler(connection)).start();
+                Thread thread = new Thread(new HttpRequestHandler(connection));
+                thread.start();
                 System.out.println("Started HttpRequestHandler");
             } catch (SocketException e) {
                 System.out.println("Closed serverSocket");
