@@ -25,6 +25,14 @@ public class Utils {
         return port;
     }
 
+    public static boolean isMac() {
+        return getOSName().contains("mac");
+    }
+
+    private static String getOSName() {
+        return System.getProperty("os.name").toLowerCase();
+    }
+
     public static void downloadFileFromAndroid(String fileName) {
         long epoch = System.currentTimeMillis() / 1000;
         String timePart = Long.toString(epoch);
@@ -54,9 +62,12 @@ public class Utils {
         execCommand(commandString);
     }
 
-    public static void copyFileToAndroid(String fileName) {
-        String escapedFileName = fileName.replace(" " , "\\ ");
+    private static void copyFileToAndroid(String fileName) {
         String commandString = String.format("adb push \"%s/%s\" /sdcard", Config.DATA_FILES_DIRECTORY,fileName);
+        if (isMac()) {
+            fileName = fileName.replace(" ", "\\ ");
+            commandString = String.format("adb push %s/%s /sdcard", Config.DATA_FILES_DIRECTORY,fileName);
+        }
         System.out.println(commandString);
         execCommand(commandString);
     }
