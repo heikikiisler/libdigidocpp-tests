@@ -3,6 +3,7 @@ package ee.testijad.mobilecpp.validation;
 import ee.testijad.mobilecpp.util.Config;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ValidationFiles {
         return TestFile.getWithoutWarnings(fileName);
     }
 
-    public static void addValidationFile(String fileName, ResultType resultType) {
+    private static void addValidationFile(String fileName, ResultType resultType) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -45,6 +46,8 @@ public class ValidationFiles {
                     }
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not find validation text file " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
