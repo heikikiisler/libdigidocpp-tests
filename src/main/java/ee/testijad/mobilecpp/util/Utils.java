@@ -67,14 +67,43 @@ public class Utils {
         }
     }
 
+    private static void execMacCommand(String commandString) {
+        List<String> output = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+        commands.add("/bin/sh");
+        commands.add("-c");
+        commands.add(commandString);
+        try {
+            ProcessBuilder builder = new ProcessBuilder(commands);
+            Process process = builder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String result;
+            while ((result = reader.readLine()) != null) {
+                output.add(result);
+                System.out.println(String.format("[COMMAND] %s", result));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void deleteFileFromAndroid(String fileName) {
         String commandString = String.format("adb shell rm -f /sdcard/%s", fileName);
         execCommand(commandString);
     }
 
     private static void copyFileToAndroid(String fileName) {
-        String commandString = String.format("adb push \"%s/%s\" /sdcard", Config.DATA_FILES_DIRECTORY,fileName);
-        execCommand(commandString);
+        String commandString = String.format("adb push \"%s/%s\" \"/sdcard\"", Config.DATA_FILES_DIRECTORY,fileName);
+        if (isMac()) {
+            //fileName = fileName.replace(" ", "\\ ");
+            commandString = String.format("adb push './%s/%s' /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
+            System.out.println(commandString);
+            execMacCommand(commandString);
+        } else {
+            System.out.println(commandString);
+            execCommand(commandString);
+        }
+
     }
 
     public static void copyAllDataFiles(String directory) {

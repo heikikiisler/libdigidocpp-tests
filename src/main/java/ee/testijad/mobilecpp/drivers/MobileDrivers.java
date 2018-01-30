@@ -34,12 +34,13 @@ public class MobileDrivers {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.IOS);
-        capabilities.setCapability(MobileCapabilityType.UDID, "0BE05697-763C-4611-87E5-DC488FC3CC26");
+       // capabilities.setCapability(MobileCapabilityType.UDID, "0BE05697-763C-4611-87E5-DC488FC3CC26");
+        capabilities.setCapability(MobileCapabilityType.UDID, "4759aa88b2ca674040ed73890fcc1bfcf3beae92");
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "IOS device");
         //  capabilities.setCapability(MobileCapabilityType.APP, Config.IOS_APP_FILE);
         capabilities.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Config.IOS_BUNDLE_ID);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
-
+        capabilities.setCapability(IOSMobileCapabilityType.USE_PREBUILT_WDA, true);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.IOS_AUTOMATION_NAME);
         capabilities.setCapability(IOSMobileCapabilityType.WDA_LOCAL_PORT, Utils.getFreePort());
