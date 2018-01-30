@@ -10,7 +10,6 @@ public class HttpServer implements Runnable {
     private ServerSocket serverSocket;
     private int port;
 
-
     public HttpServer(int port) {
         this.port = port;
     }
@@ -26,8 +25,8 @@ public class HttpServer implements Runnable {
         System.out.println("HTTP server accepting connections on port " + port);
         while (!serverSocket.isClosed()) {
             try {
+                System.out.println("Waiting connection");
                 Socket connection = serverSocket.accept();
-                System.out.println(connection.getInetAddress().getHostName());
                 System.out.println("Accepted connection");
                 Thread thread = new Thread(new HttpRequestHandler(connection));
                 thread.start();
@@ -47,5 +46,4 @@ public class HttpServer implements Runnable {
             e.printStackTrace();
         }
     }
-
 }

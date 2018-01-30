@@ -4,6 +4,7 @@ import ee.testijad.mobilecpp.util.Config;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -97,10 +98,13 @@ public class HttpRequestHandler implements Runnable {
 
     private static void sendFile(InputStream file, OutputStream out) {
         try {
-            byte[] buffer = new byte[1024*1024];
+            byte[] buffer = new byte[4*1024];
             while (file.available() > 0)
                 out.write(buffer, 0, file.read(buffer));
-        } catch (IOException e) {
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
