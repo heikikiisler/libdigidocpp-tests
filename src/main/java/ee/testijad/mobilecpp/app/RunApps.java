@@ -40,6 +40,7 @@ public class RunApps {
         System.out.println(String.format("[Http server] path %s", baseUrl));
         Thread thread = new Thread(httpServer);
         thread.start();
+        Utils.createResultsFolderIfNotExists();
     }
 
     private static void runAndroidApp() {
@@ -67,12 +68,6 @@ public class RunApps {
         double gap = 0;
         start = Instant.now();
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
-       // int httpServerPort = Utils.getFreePort();
-        int httpServerPort = 60974;
-        HttpServer server = new HttpServer(httpServerPort);
-        Thread thread = new Thread(server);
-        thread.start();
-        System.out.println("Started");
         System.out.println(driver.getPageSource());
         // TODO paste URL & Start button
         Action.pasteHttpServerUrlAndRunValidation("URL");
@@ -81,7 +76,6 @@ public class RunApps {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
-        server.stopServer();
     }
 
     private static void teardown() {

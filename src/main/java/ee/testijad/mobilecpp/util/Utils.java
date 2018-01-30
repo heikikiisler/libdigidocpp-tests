@@ -140,4 +140,12 @@ public class Utils {
     public static String getBaseUrl(int port) {
         return String.format("http://%s:%s/", getHostAddress(), String.valueOf(port));
     }
+
+    public static void createResultsFolderIfNotExists() {
+        String path = System.getProperty("user.dir") + File.separator + Config.RESULT_FILES_DIRECTORY;
+        File file = new File (path);
+        if(!file.exists()) {
+            file.mkdirs();
+        }
+    }
 }
