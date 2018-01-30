@@ -24,8 +24,10 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.APP, Config.ANDROID_APP_FILE);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Config.ANDROID_MAIN_ACTIVITY);
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Config.ANDROID_MAIN_ACTIVITY);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.ANDROID_AUTOMATION_NAME);
+        capabilities.setCapability("autoGrantPermissions", true);
         URL url = getServiceUrl(port);
         return new AndroidDriver(capabilities);
     }

@@ -21,9 +21,13 @@ public class Action {
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
         while (true) {
             try {
+                Thread.sleep(15000L);
                 new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(TEXT_VIEW));
                 // Can not catch or avoid UiAutomator2Exception of 10000 ms
-            } catch (WebDriverException ignored) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            catch (WebDriverException ignored) {
                 if (Instant.now().isBefore(endTime)) {
                     System.err.println("##########################################################");
                     System.err.println("#### Ignore above exception, still polling for result ####");

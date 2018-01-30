@@ -10,12 +10,14 @@ import io.appium.java_client.AppiumDriver;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.TimeUnit;
 
 public class RunApps {
 
     private static AppiumServer appiumServer;
+    private static HttpServer httpServer;
     private static int communicationPort = Utils.getFreePort();
+    private static int httpServerPort = Utils.getFreePort();
+    private static String baseUrl = Utils.getBaseUrl(httpServerPort);
 
     public static void main(String[] args) {
         setUp();
@@ -34,6 +36,10 @@ public class RunApps {
 
     public static void setUp() {
         appiumServer = new AppiumServer(communicationPort);
+        httpServer = new HttpServer(httpServerPort);
+        System.out.println(String.format("[Http server] path %s", baseUrl));
+        Thread thread = new Thread(httpServer);
+        thread.start();
     }
 
     private static void runAndroidApp() {
@@ -75,7 +81,7 @@ public class RunApps {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
-        server.stop();
+        server.stopServer();
     }
 
     private static void teardown() {
@@ -84,5 +90,15 @@ public class RunApps {
         if (appiumServer != null) {
             appiumServer.stopServer();
         }
+        if (httpServer != null) {
+            // Add some time to writing files down
+            try {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            httpServer.stopServer();
+        }
+
     }
 }

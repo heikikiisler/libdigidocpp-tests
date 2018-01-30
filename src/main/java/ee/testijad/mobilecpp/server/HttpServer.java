@@ -16,30 +16,30 @@ public class HttpServer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Starting HTTP server");
+        System.out.println("[HTTP server] Starting ...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("HTTP server accepting connections on port " + port);
+        System.out.println("[HTTP server] Accepting connections on port " + port);
         while (!serverSocket.isClosed()) {
             try {
-                System.out.println("Waiting connection");
+                System.out.println("[HTTP server] Waiting connection");
                 Socket connection = serverSocket.accept();
-                System.out.println("Accepted connection");
+                System.out.println("[HTTP server] Accepted connection");
                 Thread thread = new Thread(new HttpRequestHandler(connection));
                 thread.start();
-                System.out.println("Started HttpRequestHandler");
+                System.out.println("[HTTP server] Started HttpRequestHandler");
             } catch (SocketException e) {
-                System.out.println("Closed serverSocket");
+                System.out.println("[HTTP server] Closed serverSocket");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void stop() {
+    public void stopServer() {
         try {
             serverSocket.close();
         } catch (IOException e) {

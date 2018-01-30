@@ -18,7 +18,7 @@ public class AppiumServer {
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
                 .usingPort(port)
-                .withArgument(GeneralServerFlag.LOG_LEVEL, "info")
+                .withArgument(GeneralServerFlag.LOG_LEVEL, "info:info")
                 .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(Utils.getFreePort()))
                 .withArgument(GeneralServerFlag.LOG_TIMESTAMP)
                 .withArgument(GeneralServerFlag.LOCAL_TIMEZONE);

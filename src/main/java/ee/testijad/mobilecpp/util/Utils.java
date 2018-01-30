@@ -136,4 +136,8 @@ public class Utils {
         }
         return hostAddress;
     }
+
+    public static String getBaseUrl(int port) {
+        return String.format("http://%s:%s/", getHostAddress(), String.valueOf(port));
+    }
 }

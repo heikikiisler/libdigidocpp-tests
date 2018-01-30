@@ -45,12 +45,12 @@ public class HttpRequestHandler implements Runnable {
 
             if (!request.startsWith("GET") || request.length() < 14 || !request.endsWith("HTTP/1.1")) {
                 if (request.startsWith("PUT") & request.length() > 14 & request.endsWith("HTTP/1.1")) {
-                    System.out.println("Processing PUT request");
+                    System.out.println("[HTTP server] Processing PUT request");
                     String file = request.split("\n")[0].split(" ")[1].split("/")[1];
                     String targetFile = targetFilePath(file);
                     String fileRequest = request.substring(4, request.length() - 9).trim();
                     if (!bufferIsEmpty) {
-                        System.out.println(String.format("Source file: %s", file));
+                        System.out.println(String.format("[HTTP server] Source file: %s", file));
                         int fileSaveResult = writeFile(in, targetFile);
 
                         if (fileSaveResult == 200) {
@@ -66,7 +66,7 @@ public class HttpRequestHandler implements Runnable {
                     generateError(printStream, socket, "400", "Bad Request", "Your browser sent a request that this server could not understand.");
                 }
             } else {
-                System.out.println("Processing GET request");
+                System.out.println("[HTTP server] Processing GET request");
                 String fileRequest = request.substring(4, request.length() - 9).trim();
                 File fileToSend = new File("./" + fileRequest);
                 if (fileToSend.isDirectory() && !fileRequest.endsWith("/")) {
@@ -93,12 +93,12 @@ public class HttpRequestHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Processing finished on thread " + Thread.currentThread().getName());
+        System.out.println("[HTTP server] Processing finished on thread " + Thread.currentThread().getName());
     }
 
     private static void sendFile(InputStream file, OutputStream out) {
         try {
-            byte[] buffer = new byte[4*1024];
+            byte[] buffer = new byte[1024*1024];
             while (file.available() > 0)
                 out.write(buffer, 0, file.read(buffer));
         } catch (SocketException e) {
@@ -160,7 +160,7 @@ public class HttpRequestHandler implements Runnable {
             System.out.println(e.getMessage());
             return 304;
         }
-        System.out.println(String.format("File %s writing succeeded", targetFilePath));
+        System.out.println(String.format("[HTTP server] File %s writing succeeded", targetFilePath));
         return 200;
     }
 
