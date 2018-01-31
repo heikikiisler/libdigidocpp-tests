@@ -6,6 +6,7 @@ import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -47,8 +48,14 @@ public class Action {
         }
     }
 
-    public static void pasteHttpServerUrlAndRunValidation(String url) {
-        // TODO paste URL & Start button
+    public static void pasteHttpServerUrlAndRunValidation(AppiumDriver driver, String url) {
+        By RUN_BUTTON = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
+        By HTTP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
+
+        WebElement textElement = driver.findElement(HTTP_FIELD);
+        textElement.sendKeys(url);
+        WebElement buttonElement = driver.findElement(RUN_BUTTON);
+        buttonElement.click();
     }
 
 }

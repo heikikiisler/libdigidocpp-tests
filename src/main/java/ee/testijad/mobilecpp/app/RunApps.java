@@ -17,15 +17,17 @@ public class RunApps {
     private static HttpServer httpServer;
     private static int communicationPort = Utils.getFreePort();
     private static int httpServerPort = Utils.getFreePort();
-    private static String baseUrl = Utils.getBaseUrl(httpServerPort);
+    private static String baseUrl = Utils.getBaseUrl(httpServerPort) + "download/validationFiles.zip";
 
     public static void main(String[] args) {
-        setUp();
+        System.out.println(String.format("Starting %s validation app", System.getProperty("mobilecpp.os")));
         switch (System.getProperty("mobilecpp.os").toLowerCase()) {
             case "android":
+                setUp();
                 runAndroidApp();
                 break;
             case "ios":
+                setUp();
                 runIosApp();
                 break;
             default:
@@ -68,9 +70,7 @@ public class RunApps {
         double gap = 0;
         start = Instant.now();
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
-        System.out.println(driver.getPageSource());
-        // TODO paste URL & Start button
-        Action.pasteHttpServerUrlAndRunValidation("URL");
+        Action.pasteHttpServerUrlAndRunValidation(driver, baseUrl);
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
