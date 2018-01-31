@@ -36,7 +36,6 @@ public class HttpRequestHandler implements Runnable {
                 misc = in.readLine();
                 System.out.println(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
-                    System.out.println("Sees");
                    if (Integer.parseInt(misc.split(":")[1].trim()) == 0) {
                        bufferIsEmpty = true;
                    }

@@ -20,8 +20,8 @@ public class Action {
     // iOS locators
     private static final By RUN_BUTTON = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
     private static final By HTTP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
-    private static final By IOS_APP_FIELD = MobileBy.name("libdigidocpp-ios");
-
+    private static final By IOS_APP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeApplication' AND name == 'libdigidocpp-ios'");
+    private static final By IOS_APP_DONE = MobileBy.name("DONE");
 
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
         Instant startTime = Instant.now();
@@ -29,7 +29,7 @@ public class Action {
         while (true) {
             try {
                 Thread.sleep(15000L);
-                new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(TEXT_VIEW));
+                new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(TEXT_VIEW));
                 // Can not catch or avoid UiAutomator2Exception of 10000 ms
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -68,12 +68,31 @@ public class Action {
         while (Instant.now().isBefore(endTime)) {
             try {
                 Thread.sleep(15000L);
-                new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(IOS_APP_FIELD));
+                WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(IOS_APP_DONE));
+                if(waiter != null) {
+                    System.out.println(" ******************************************** DONE **********************************");
+                    break;
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
+    public static void waitForAndroidResult(AppiumDriver driver, int timeoutInSeconds) {
+        Instant startTime = Instant.now();
+        Instant endTime = startTime.plusSeconds(timeoutInSeconds);
+        while (Instant.now().isBefore(endTime)) {
+            try {
+                Thread.sleep(15000L);
+                WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(TEXT_VIEW));
+                if(waiter != null) {
+                    System.out.println(" ******************************************** DONE **********************************");
+                    break;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

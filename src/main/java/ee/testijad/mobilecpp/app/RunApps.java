@@ -54,7 +54,7 @@ public class RunApps {
         double gap = 0;
         start = Instant.now();
         AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
-        Action.waitForResult(driver, Config.VALIDATION_TIMEOUT);
+        Action.waitForAndroidResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
@@ -88,7 +88,7 @@ public class RunApps {
         if (httpServer != null) {
             // Add some time to writing files down
             try {
-                Thread.sleep(3000L);
+                Thread.sleep(10000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
