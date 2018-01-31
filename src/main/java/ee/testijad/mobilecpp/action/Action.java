@@ -17,6 +17,12 @@ public class Action {
     private static final String LOCATOR = String.format("%s:id/content", Config.ANDROID_APP_ID);
     private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", LOCATOR));
 
+    // iOS locators
+    private static final By RUN_BUTTON = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
+    private static final By HTTP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
+    private static final By IOS_APP_FIELD = MobileBy.name("libdigidocpp-ios");
+
+
     public static void waitForResult(AppiumDriver driver, int timeoutInSeconds) {
         Instant startTime = Instant.now();
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
@@ -49,13 +55,25 @@ public class Action {
     }
 
     public static void pasteHttpServerUrlAndRunValidation(AppiumDriver driver, String url) {
-        By RUN_BUTTON = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
-        By HTTP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
 
         WebElement textElement = driver.findElement(HTTP_FIELD);
         textElement.sendKeys(url);
         WebElement buttonElement = driver.findElement(RUN_BUTTON);
         buttonElement.click();
+    }
+
+    public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
+        Instant startTime = Instant.now();
+        Instant endTime = startTime.plusSeconds(timeoutInSeconds);
+        while (Instant.now().isBefore(endTime)) {
+            try {
+                Thread.sleep(15000L);
+                new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(IOS_APP_FIELD));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 }

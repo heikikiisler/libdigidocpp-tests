@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.server;
 
 import ee.testijad.mobilecpp.util.Config;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,16 +30,23 @@ public class HttpRequestHandler implements Runnable {
             if (request == null) return;
 
             boolean bufferIsEmpty = false;
+            String contentType = null;
             String misc;
             while (true) {
                 misc = in.readLine();
+                System.out.println(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
                     System.out.println("Sees");
                    if (Integer.parseInt(misc.split(":")[1].trim()) == 0) {
                        bufferIsEmpty = true;
                    }
                 }
-                if (misc == null || misc.length() == 0) {
+                if (misc.startsWith("Content-Type:")) {
+                    System.out.println(misc);
+                    contentType = misc.split(":")[1].trim().toLowerCase();
+                }
+
+                    if (misc == null || misc.length() == 0) {
                     break;
                 }
             }
@@ -46,7 +54,13 @@ public class HttpRequestHandler implements Runnable {
             if (!request.startsWith("GET") || request.length() < 14 || !request.endsWith("HTTP/1.1")) {
                 if (request.startsWith("PUT") & request.length() > 14 & request.endsWith("HTTP/1.1")) {
                     System.out.println("[HTTP server] Processing PUT request");
-                    String file = request.split("\n")[0].split(" ")[1].split("/")[1];
+                    String file ="a.b";
+                    if(contentType.startsWith("text/plain")) {
+                        file = "digidocpp.log";
+                    }
+                    if(contentType.startsWith("application/json")) {
+                        file = "result.json";
+                    }
                     String targetFile = targetFilePath(file);
                     String fileRequest = request.substring(4, request.length() - 9).trim();
                     if (!bufferIsEmpty) {
@@ -68,7 +82,9 @@ public class HttpRequestHandler implements Runnable {
             } else {
                 System.out.println("[HTTP server] Processing GET request");
                 String fileRequest = request.substring(4, request.length() - 9).trim();
-                File fileToSend = new File("./" + fileRequest);
+                String fileName = "./" + Config.ZIP_FILE_DIRECTORY;
+                System.out.println(String.format("[HTTP server] Zip file name: %s", fileName));
+                File fileToSend = new File(fileName);
                 if (fileToSend.isDirectory() && !fileRequest.endsWith("/")) {
                     printStream.print(String.format("HTTP/1.1\r\n 301 Moved Permanently<br> Location: http://%s:%s/%s/<br><br>"
                             , socket.getLocalAddress().getHostAddress()
@@ -76,7 +92,7 @@ public class HttpRequestHandler implements Runnable {
                 } else {
                     try {
                         InputStream file = new FileInputStream(fileToSend);
-                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileRequest), getTimeStamp()));
+                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileName), getTimeStamp()));
 
                         sendFile(file, out);
                     } catch (FileNotFoundException e) {
@@ -146,14 +162,7 @@ public class HttpRequestHandler implements Runnable {
         System.out.println(String.format("Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
-            String data = ".";
-            while (!data.equals("")) {
-                data = in.readLine();
-                if (data.equals("")) {
-                    break;
-                }
-                bufWriter.write(data);
-            }
+            IOUtils.copy(in, bufWriter);
             bufWriter.flush();
             bufWriter.close();
         } catch (IOException e) {

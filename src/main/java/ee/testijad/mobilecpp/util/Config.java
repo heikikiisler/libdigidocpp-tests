@@ -18,7 +18,7 @@ public class Config {
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationWarningFileName");
     public static final String VALIDATION_ERROR_FILE_PATH =
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationErrorFileName");
-    public static final String TEST_RESULTS_DIRECTORY = CONFIG.getString("testParameters.testResultsDirectory");
+    public static final String ZIP_FILE_DIRECTORY = CONFIG.getString("testParameters.zipFilePath");
 
     public static final String LIB_LOG_FILE = CONFIG.getString("testParameters.libLogFileName");
     public static final String RESULTS_FILE = CONFIG.getString("testParameters.resultsFileName");

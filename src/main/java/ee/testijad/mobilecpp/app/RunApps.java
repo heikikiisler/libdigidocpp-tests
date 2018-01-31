@@ -17,7 +17,7 @@ public class RunApps {
     private static HttpServer httpServer;
     private static int communicationPort = Utils.getFreePort();
     private static int httpServerPort = Utils.getFreePort();
-    private static String baseUrl = Utils.getBaseUrl(httpServerPort) + "download/validationFiles.zip";
+    private static String baseUrl = Utils.getBaseUrl(httpServerPort) + "sync";
 
     public static void main(String[] args) {
         System.out.println(String.format("Starting %s validation app", System.getProperty("mobilecpp.os")));
@@ -68,9 +68,10 @@ public class RunApps {
         System.out.println("Action");
         Instant start, end;
         double gap = 0;
-        start = Instant.now();
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidation(driver, baseUrl);
+        start = Instant.now();
+        Action.waitForIosResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
