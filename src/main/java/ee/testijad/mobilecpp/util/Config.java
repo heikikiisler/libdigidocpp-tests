@@ -36,6 +36,8 @@ public class Config {
 
     public static final String IOS_AUTOMATION_NAME = CONFIG.getString("appium.ios.automationName");
 
+    public static final String APPIUM_LOGLEVEL = getStringIfHasPath("appium.logLevel");
+
     private static com.typesafe.config.Config getConfig() {
         File configFile = new File("properties.conf");
         com.typesafe.config.Config config = ConfigFactory.parseFile(configFile);
@@ -48,5 +50,12 @@ public class Config {
             }
         }
         return config;
+    }
+
+    private static String getStringIfHasPath(String path) {
+        if(CONFIG.hasPath(path)) {
+            return CONFIG.getString(path);
+        }
+        return null;
     }
 }

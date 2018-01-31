@@ -1,5 +1,6 @@
 package ee.testijad.mobilecpp.appium;
 
+import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -18,10 +19,12 @@ public class AppiumServer {
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
                 .usingPort(port)
-                .withArgument(GeneralServerFlag.LOG_LEVEL, "info:info")
                 .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(Utils.getFreePort()))
                 .withArgument(GeneralServerFlag.LOG_TIMESTAMP)
                 .withArgument(GeneralServerFlag.LOCAL_TIMEZONE);
+        if(Config.APPIUM_LOGLEVEL != null) {
+            appiumServiceBuilder.withArgument(GeneralServerFlag.LOG_LEVEL, Config.APPIUM_LOGLEVEL);
+        }
         appiumService = AppiumDriverLocalService.buildService(appiumServiceBuilder);
         appiumService.start();
     }

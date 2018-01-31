@@ -16,6 +16,7 @@ appium {
       orgID="ABCD1234"
     }
   }
+  logLevel="info"
 }
 
 # TestNG test suite file location
