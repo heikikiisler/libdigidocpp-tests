@@ -112,10 +112,16 @@ public class HttpRequestHandler implements Runnable {
     }
 
     private static void sendFile(InputStream file, OutputStream out) {
+        System.out.println("Starting file sending");
         try {
             byte[] buffer = new byte[1024*1024];
-            while (file.available() > 0)
+            int i = 0;
+            while (file.available() > 0) {
                 out.write(buffer, 0, file.read(buffer));
+                System.out.println(String.format("[HTTP Server] Send file:I väärtus %s", String.valueOf(i)));
+                i++;
+            }
+            System.out.println("File sending is complete");
         } catch (SocketException e) {
             e.printStackTrace();
         }

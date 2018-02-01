@@ -47,21 +47,17 @@ public class RunApps {
 
     private static void runAndroidApp() {
         System.out.println("Action");
-        Utils.deleteFileFromAndroid(Config.RESULTS_FILE);
-        Utils.deleteFileFromAndroid(Config.LIB_LOG_FILE);
-        Utils.copyAllDataFiles(Config.DATA_FILES_DIRECTORY);
         Instant start, end;
         double gap = 0;
-        start = Instant.now();
         AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
-        Action.waitForAndroidResult(driver, Config.VALIDATION_TIMEOUT);
+        Action.pasteHttpServerUrlAndRunValidationAndroid(driver, baseUrl);
+        start = Instant.now();
+        Action.waitForResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         }
         System.out.println(String.format("Working time: %.3f seconds ", gap));
-        Utils.downloadFileFromAndroid(Config.RESULTS_FILE);
-        Utils.downloadFileFromAndroid(Config.LIB_LOG_FILE);
     }
 
     private static void runIosApp() {
@@ -88,7 +84,7 @@ public class RunApps {
         if (httpServer != null) {
             // Add some time to writing files down
             try {
-                Thread.sleep(10000L);
+                Thread.sleep(20000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

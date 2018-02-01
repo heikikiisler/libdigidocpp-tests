@@ -14,12 +14,15 @@ import java.time.Instant;
 
 public class Action {
 
+    // Android locators
     private static final String LOCATOR = String.format("%s:id/content", Config.ANDROID_APP_ID);
     private static final By TEXT_VIEW = MobileBy.xpath(String.format("//android.widget.TextView[@resource-id='%s']", LOCATOR));
+    private static final By RUN_BUTTON_ANDROID = MobileBy.xpath(String.format("//android.widget.Button[@resource-id='%s:id/run']", Config.ANDROID_APP_ID));
+    private static final By URL_FIELD_ANDROID = MobileBy.xpath(String.format("//android.widget.EditText[@resource-id='%s:id/search']", Config.ANDROID_APP_ID));
 
     // iOS locators
-    private static final By RUN_BUTTON = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
-    private static final By HTTP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
+    private static final By RUN_BUTTON_IOS = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeButton'");
+    private static final By URL_FIELD_IOS = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeTextField'");
     private static final By IOS_APP_FIELD = MobileBy.iOSNsPredicateString("type == 'XCUIElementTypeApplication' AND name == 'libdigidocpp-ios'");
     private static final By IOS_APP_DONE = MobileBy.name("DONE");
 
@@ -56,9 +59,22 @@ public class Action {
 
     public static void pasteHttpServerUrlAndRunValidation(AppiumDriver driver, String url) {
 
-        WebElement textElement = driver.findElement(HTTP_FIELD);
+        WebElement textElement = driver.findElement(URL_FIELD_IOS);
         textElement.sendKeys(url);
-        WebElement buttonElement = driver.findElement(RUN_BUTTON);
+        WebElement buttonElement = driver.findElement(RUN_BUTTON_IOS);
+        buttonElement.click();
+    }
+
+    public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
+        try {
+            Thread.sleep(15000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated(URL_FIELD_ANDROID));
+        WebElement textElement = driver.findElement(URL_FIELD_ANDROID);
+        textElement.sendKeys(url);
+        WebElement buttonElement = driver.findElement(RUN_BUTTON_ANDROID);
         buttonElement.click();
     }
 
