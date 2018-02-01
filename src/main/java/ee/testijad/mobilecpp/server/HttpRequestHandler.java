@@ -1,11 +1,9 @@
 package ee.testijad.mobilecpp.server;
 
 import ee.testijad.mobilecpp.util.Config;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,16 +34,16 @@ public class HttpRequestHandler implements Runnable {
                 misc = in.readLine();
                 System.out.println(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
-                   if (Integer.parseInt(misc.split(":")[1].trim()) == 0) {
-                       bufferIsEmpty = true;
-                   }
+                    if (Integer.parseInt(misc.split(":")[1].trim()) == 0) {
+                        bufferIsEmpty = true;
+                    }
                 }
                 if (misc.startsWith("Content-Type:")) {
                     System.out.println(misc);
                     contentType = misc.split(":")[1].trim().toLowerCase();
                 }
 
-                    if (misc == null || misc.length() == 0) {
+                if (misc == null || misc.length() == 0) {
                     break;
                 }
             }
@@ -53,15 +51,15 @@ public class HttpRequestHandler implements Runnable {
             if (!request.startsWith("GET") || request.length() < 14 || !request.endsWith("HTTP/1.1")) {
                 if (request.startsWith("PUT") & request.length() > 14 & request.endsWith("HTTP/1.1")) {
                     System.out.println("[HTTP server] Processing PUT request");
-                    String file ="a.b";
-                    if(contentType.startsWith("text/plain")) {
+                    String file = "a.b";
+                    if (contentType.startsWith("text/plain")) {
                         file = "digidocpp.log";
                     }
-                    if(contentType.startsWith("application/json")) {
+                    if (contentType.startsWith("application/json")) {
                         file = "result.json";
                     }
                     String targetFile = targetFilePath(file);
-                    String fileRequest = request.substring(4, request.length() - 9).trim();
+                    // String fileRequest = request.substring(4, request.length() - 9).trim();
                     if (!bufferIsEmpty) {
                         System.out.println(String.format("[HTTP server] Source file: %s", file));
                         int fileSaveResult = writeFile(in, targetFile);
@@ -114,7 +112,7 @@ public class HttpRequestHandler implements Runnable {
     private static void sendFile(InputStream file, OutputStream out) {
         System.out.println("Starting file sending");
         try {
-            byte[] buffer = new byte[1024*1024];
+            byte[] buffer = new byte[1024 * 1024];
             int i = 0;
             while (file.available() > 0) {
                 out.write(buffer, 0, file.read(buffer));
@@ -122,10 +120,7 @@ public class HttpRequestHandler implements Runnable {
                 i++;
             }
             System.out.println("File sending is complete");
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -143,22 +138,21 @@ public class HttpRequestHandler implements Runnable {
     private void generateError(PrintStream printStream, Socket connection,
                                String code, String title, String message) {
         printStream.print("HTTP/1.0 " + code + " " + title + "\r\n" +
-                "\r\n" +
-                "<!DOCTYPE HTML>\r\n" +
-                "<TITLE>Server error</TITLE>\r\n" +
-                "</HEAD><BODY>\r\n" +
-                "<H1>" + title + "</H1>\r\n" + message + "<P>\r\n" +
-                "<HR><ADDRESS>HTTP Server 1.0 at " +
-                connection.getLocalAddress().getHostName() +
-                " Port " + connection.getLocalPort() + "</ADDRESS>\r\n" +
-                "</BODY></HTML>\r\n");
+                          "\r\n" +
+                          "<!DOCTYPE HTML>\r\n" +
+                          "<TITLE>Server error</TITLE>\r\n" +
+                          "</HEAD><BODY>\r\n" +
+                          "<H1>" + title + "</H1>\r\n" + message + "<P>\r\n" +
+                          "<HR><ADDRESS>HTTP Server 1.0 at " +
+                          connection.getLocalAddress().getHostName() +
+                          " Port " + connection.getLocalPort() + "</ADDRESS>\r\n" +
+                          "</BODY></HTML>\r\n");
     }
 
     private static String targetFilePath(String fileName) {
         long epoch = System.currentTimeMillis() / 1000;
         String timePart = Long.toString(epoch);
-        String targetPath = String.format("%s/%s-%s", Config.RESULT_FILES_DIRECTORY, timePart, fileName);
-        return targetPath;
+        return String.format("%s/%s-%s", Config.RESULT_FILES_DIRECTORY, timePart, fileName);
     }
 
     private static int writeFile(BufferedReader in, String targetFilePath) {
@@ -169,15 +163,13 @@ public class HttpRequestHandler implements Runnable {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
             System.out.println(String.format("****************** IO copy started: %s", targetFilePath));
             char[] buffer = new char[1024 * 16];
-            int len = 0;
+            int len;
             while ((len = in.read(buffer)) >= 0) {
                 bufWriter.write(buffer, 0, len);
             }
-          //  IOUtils.copy(in, bufWriter);
             System.out.println(String.format("********************** IO copy ended: %s", targetFilePath));
             bufWriter.flush();
             System.out.println(String.format("********************** IO flush ended: %s", targetFilePath));
-            bufWriter.close();
             System.out.println(String.format("********************** Writer closed : %s", targetFilePath));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -190,8 +182,7 @@ public class HttpRequestHandler implements Runnable {
     private static String getTimeStamp() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-        String formattedDate = sdf.format(date);
-        return formattedDate;
+        return sdf.format(date);
     }
 
 }

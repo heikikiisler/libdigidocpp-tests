@@ -36,8 +36,7 @@ public class Action {
                 // Can not catch or avoid UiAutomator2Exception of 10000 ms
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-            catch (WebDriverException ignored) {
+            } catch (WebDriverException ignored) {
                 if (Instant.now().isBefore(endTime)) {
                     System.err.println("##########################################################");
                     System.err.println("#### Ignore above exception, still polling for result ####");
@@ -58,11 +57,8 @@ public class Action {
     }
 
     public static void pasteHttpServerUrlAndRunValidation(AppiumDriver driver, String url) {
-
-        WebElement textElement = driver.findElement(URL_FIELD_IOS);
-        textElement.sendKeys(url);
-        WebElement buttonElement = driver.findElement(RUN_BUTTON_IOS);
-        buttonElement.click();
+        driver.findElement(URL_FIELD_IOS).sendKeys(url);
+        driver.findElement(RUN_BUTTON_IOS).click();
     }
 
     public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
@@ -72,10 +68,8 @@ public class Action {
             e.printStackTrace();
         }
         new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated(URL_FIELD_ANDROID));
-        WebElement textElement = driver.findElement(URL_FIELD_ANDROID);
-        textElement.sendKeys(url);
-        WebElement buttonElement = driver.findElement(RUN_BUTTON_ANDROID);
-        buttonElement.click();
+        driver.findElement(URL_FIELD_ANDROID).sendKeys(url);
+        driver.findElement(RUN_BUTTON_ANDROID).click();
     }
 
     public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
@@ -85,7 +79,7 @@ public class Action {
             try {
                 Thread.sleep(15000L);
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(IOS_APP_DONE));
-                if(waiter != null) {
+                if (waiter != null) {
                     System.out.println(" ******************************************** DONE **********************************");
                     break;
                 }
@@ -102,7 +96,7 @@ public class Action {
             try {
                 Thread.sleep(15000L);
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(TEXT_VIEW));
-                if(waiter != null) {
+                if (waiter != null) {
                     System.out.println(" ******************************************** DONE **********************************");
                     break;
                 }

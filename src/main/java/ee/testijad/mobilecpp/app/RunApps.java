@@ -84,7 +84,7 @@ public class RunApps {
         if (httpServer != null) {
             // Add some time to writing files down
             try {
-                Thread.sleep(20000L);
+                Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
