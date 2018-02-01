@@ -167,9 +167,18 @@ public class HttpRequestHandler implements Runnable {
         System.out.println(String.format("Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
-            IOUtils.copy(in, bufWriter);
+            System.out.println(String.format("****************** IO copy started: %s", targetFilePath));
+            char[] buffer = new char[1024 * 16];
+            int len = 0;
+            while ((len = in.read(buffer)) >= 0) {
+                bufWriter.write(buffer, 0, len);
+            }
+          //  IOUtils.copy(in, bufWriter);
+            System.out.println(String.format("********************** IO copy ended: %s", targetFilePath));
             bufWriter.flush();
+            System.out.println(String.format("********************** IO flush ended: %s", targetFilePath));
             bufWriter.close();
+            System.out.println(String.format("********************** Writer closed : %s", targetFilePath));
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return 304;
