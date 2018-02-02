@@ -29,12 +29,14 @@ public class HttpRequestHandler implements Runnable {
 
             boolean bufferIsEmpty = false;
             String contentType = null;
+            int contentLength = 0;
             String misc;
             while (true) {
                 misc = in.readLine();
                 System.out.println(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
-                    if (Integer.parseInt(misc.split(":")[1].trim()) == 0) {
+                    contentLength = Integer.parseInt(misc.split(":")[1].trim());
+                    if (contentLength == 0) {
                         bufferIsEmpty = true;
                     }
                 }
@@ -62,7 +64,7 @@ public class HttpRequestHandler implements Runnable {
                     // String fileRequest = request.substring(4, request.length() - 9).trim();
                     if (!bufferIsEmpty) {
                         System.out.println(String.format("[HTTP server] Source file: %s", file));
-                        int fileSaveResult = writeFile(in, targetFile);
+                        int fileSaveResult = writeFile(in, targetFile, contentLength);
 
                         if (fileSaveResult == 200) {
                             printStream.print("HTTP/1.0 " + fileSaveResult + "\r\nDate:" + getTimeStamp() + "\r\n\r\nUpload succeeded<br>");
@@ -116,7 +118,7 @@ public class HttpRequestHandler implements Runnable {
             int i = 0;
             while (file.available() > 0) {
                 out.write(buffer, 0, file.read(buffer));
-                System.out.println(String.format("[HTTP Server] Send file:I väärtus %s", String.valueOf(i)));
+                System.out.println(String.format("[HTTP Server] Send file: index %s", String.valueOf(i)));
                 i++;
             }
             System.out.println("File sending is complete");
@@ -155,22 +157,30 @@ public class HttpRequestHandler implements Runnable {
         return String.format("%s/%s-%s", Config.RESULT_FILES_DIRECTORY, timePart, fileName);
     }
 
-    private static int writeFile(BufferedReader in, String targetFilePath) {
+    private static int writeFile(BufferedReader in, String targetFilePath, int contentLength) {
         File myFile = new File(targetFilePath);
         BufferedWriter bufWriter;
         System.out.println(String.format("Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
-            System.out.println(String.format("****************** IO copy started: %s", targetFilePath));
+            System.out.println(String.format("****************** File copy started: %s", targetFilePath));
             char[] buffer = new char[1024 * 16];
             int len;
+            int total = 0;
+            int counter = 0;
             while ((len = in.read(buffer)) >= 0) {
+                System.out.println(String.format("**** Write started: %s , size: %s", String.valueOf(counter), String.valueOf(len)));
                 bufWriter.write(buffer, 0, len);
+                total += len;
+                System.out.println(String.format("**** Write ended: %s ,  copied: %s", String.valueOf(counter), String.valueOf(total)));
+                counter++;
+                if (total == contentLength) {
+                    break;
+                }
             }
-            System.out.println(String.format("********************** IO copy ended: %s", targetFilePath));
             bufWriter.flush();
-            System.out.println(String.format("********************** IO flush ended: %s", targetFilePath));
-            System.out.println(String.format("********************** Writer closed : %s", targetFilePath));
+            bufWriter.close();
+            System.out.println(String.format("********************** File copy ended: %s", targetFilePath));
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return 304;

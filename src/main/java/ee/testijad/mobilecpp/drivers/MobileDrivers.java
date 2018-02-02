@@ -22,7 +22,7 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Android device");
         capabilities.setCapability(MobileCapabilityType.APP, Config.ANDROID_APP_FILE);
-        capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+      //  capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Config.ANDROID_MAIN_ACTIVITY);
         capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Config.ANDROID_MAIN_ACTIVITY);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);

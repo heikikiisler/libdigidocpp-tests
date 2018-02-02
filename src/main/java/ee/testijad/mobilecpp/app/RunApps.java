@@ -52,7 +52,7 @@ public class RunApps {
         AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidationAndroid(driver, baseUrl);
         start = Instant.now();
-        Action.waitForResult(driver, Config.VALIDATION_TIMEOUT);
+        Action.waitForAndroidResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         if (start != null) {
             gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
