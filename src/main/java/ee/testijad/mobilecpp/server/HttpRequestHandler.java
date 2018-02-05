@@ -1,11 +1,10 @@
 package ee.testijad.mobilecpp.server;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class HttpRequestHandler implements Runnable {
@@ -67,7 +66,7 @@ public class HttpRequestHandler implements Runnable {
                         int fileSaveResult = writeFile(in, targetFile, contentLength);
 
                         if (fileSaveResult == 200) {
-                            printStream.print("HTTP/1.0 " + fileSaveResult + "\r\nDate:" + getTimeStamp() + "\r\n\r\nUpload succeeded<br>");
+                            printStream.print("HTTP/1.0 " + fileSaveResult + "\r\nDate:" + Utils.getTimeStamp() + "\r\n\r\nUpload succeeded<br>");
                         } else {
                             generateError(printStream, socket, "500", "Internal server error",
                                     "Upload error");
@@ -91,7 +90,7 @@ public class HttpRequestHandler implements Runnable {
                 } else {
                     try {
                         InputStream file = new FileInputStream(fileToSend);
-                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileName), getTimeStamp()));
+                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileName), Utils.getTimeStamp()));
 
                         sendFile(file, out);
                     } catch (FileNotFoundException e) {
@@ -187,12 +186,6 @@ public class HttpRequestHandler implements Runnable {
         }
         System.out.println(String.format("[HTTP server] File %s writing succeeded", targetFilePath));
         return 200;
-    }
-
-    private static String getTimeStamp() {
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-        return sdf.format(date);
     }
 
 }

@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.action;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
@@ -29,14 +30,18 @@ public class Action {
     }
 
     public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
+        System.out.println(String.format("++++++++++++ Paste sleep started %s", Utils.getLocalTimeStamp()));
         try {
             Thread.sleep(15000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println(String.format("+++++++++++++ Paste sleep ended %s", Utils.getLocalTimeStamp()));
         new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated(URL_FIELD_ANDROID));
+        System.out.println(String.format("+++++++++++++ URL field waiting ended %s", Utils.getLocalTimeStamp()));
         driver.findElement(URL_FIELD_ANDROID).sendKeys(url);
         driver.findElement(RUN_BUTTON_ANDROID).click();
+        System.out.println(String.format("+++++++++++++ Clicked %s", Utils.getLocalTimeStamp()));
     }
 
     public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
