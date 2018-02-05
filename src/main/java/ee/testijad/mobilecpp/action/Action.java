@@ -32,7 +32,7 @@ public class Action {
     public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
         System.out.println(String.format("++++++++++++ Paste sleep started %s", Utils.getLocalTimeStamp()));
         try {
-            Thread.sleep(15000L);
+            Thread.sleep(20000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -52,7 +52,7 @@ public class Action {
                 Thread.sleep(15000L);
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(IOS_APP_DONE));
                 if (waiter != null) {
-                    System.out.println(" ******************************************** DONE **********************************");
+                    System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
                     break;
                 }
             } catch (InterruptedException e) {
@@ -62,17 +62,21 @@ public class Action {
     }
 
     public static void waitForAndroidResult(AppiumDriver driver, int timeoutInSeconds) {
+        System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
         Instant startTime = Instant.now();
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
         while (Instant.now().isBefore(endTime)) {
             try {
                 Thread.sleep(15000L);
+                System.out.println(String.format("++++++++++++ Result waiting sleep ended %s", Utils.getLocalTimeStamp()));
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
                 if (waiter != null) {
-                    System.out.println(" ******************************************** DONE **********************************");
+                    System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
+                    System.out.println(String.format("Driver source : %s", driver.getPageSource()));
                     break;
                 }
             } catch (InterruptedException e) {
+                System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
                 e.printStackTrace();
             }
         }
