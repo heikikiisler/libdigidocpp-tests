@@ -74,11 +74,11 @@ task validationTest(type: Test) {
 }
 
 task androidTest(type: GradleBuild) {
-    tasks = ['validateWithAndroid', 'generateSuite', 'validationTest']
+    tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
 }
 
 task iosTest(type: GradleBuild) {
-    tasks = ['validateWithIos', 'generateSuite', 'validationTest']
+    tasks = ['prepareValidationZipFile', 'validateWithIos', 'generateSuite', 'validationTest']
 }
 
 task wrapper(type: Wrapper) {

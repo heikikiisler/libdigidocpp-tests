@@ -1,40 +1,34 @@
 package ee.testijad.mobilecpp.validation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestFile {
 
     private String fileName;
-    private ResultType expectedResult;
+    private ResultType expectedResultType;
     private List<String> expectedWarnings;
 
-    public TestFile(String fileName, ResultType expectedResult, List<String> expectedWarnings) {
+    TestFile(String fileName, ResultType expectedResultType, List<String> expectedWarnings) {
         this.fileName = fileName;
-        this.expectedResult = expectedResult;
+        this.expectedResultType = expectedResultType;
         this.expectedWarnings = expectedWarnings;
     }
 
-    public static TestFile getWithoutWarnings(String fileName) {
-        return new TestFile(fileName, ResultType.OK, null);
+    static TestFile getWithoutWarnings(String fileName) {
+        return new TestFile(fileName, ResultType.OK, new ArrayList<>());
     }
 
     public String getFileName() {
         return fileName;
     }
 
-    public ResultType getExpectedResult() {
-        return expectedResult;
+    public ResultType getExpectedResultType() {
+        return expectedResultType;
     }
 
     public List<String> getExpectedWarnings() {
         return expectedWarnings;
-    }
-
-    public boolean equals(TestFile testFile) {
-        return fileName.equals(testFile.fileName) &&
-               expectedResult == testFile.expectedResult &&
-               expectedWarnings.containsAll(testFile.expectedWarnings) &&
-               testFile.expectedWarnings.containsAll(expectedWarnings);
     }
 
 }
