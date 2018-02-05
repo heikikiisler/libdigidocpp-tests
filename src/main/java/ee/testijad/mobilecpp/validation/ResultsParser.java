@@ -49,10 +49,18 @@ public class ResultsParser {
         return latestResultsFileName;
     }
 
-    public ResultType getTestFileResult(TestFile testFile) {
+    public FileResult getTestFileResult(TestFile testFile) {
         for (Map<String, String> result : results) {
             if (result.get("f").equals(testFile.getFileName())) {
-                return ResultType.get(result.get("s"));
+                String resultString = result.get("s");
+                String warningsString = result.get("d");
+                List<String> warnings = new ArrayList<>();
+                if (!warningsString.equals("")) {
+                    Arrays.stream(warningsString.split("\\n"))
+                            .filter(warning -> !warning.equals(""))
+                            .forEach(warnings::add);
+                }
+                return new FileResult(ResultType.get(resultString), warnings);
             }
         }
         throw new RuntimeException(String.format("Could not find test file \"%s\" from results", testFile.getFileName()));
