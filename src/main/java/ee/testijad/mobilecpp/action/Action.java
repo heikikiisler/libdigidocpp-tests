@@ -45,6 +45,7 @@ public class Action {
     }
 
     public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
+        System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
         Instant startTime = Instant.now();
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
         while (Instant.now().isBefore(endTime)) {
@@ -56,6 +57,7 @@ public class Action {
                     break;
                 }
             } catch (InterruptedException e) {
+                System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
                 e.printStackTrace();
             }
         }
@@ -72,7 +74,7 @@ public class Action {
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
                 if (waiter != null) {
                     System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
-                    System.out.println(String.format("Driver source : %s", driver.getPageSource()));
+                    System.out.println(String.format(" ************ %s ************", driver.findElement(ANDROID_APP_DONE).getText()));
                     break;
                 }
             } catch (InterruptedException e) {
