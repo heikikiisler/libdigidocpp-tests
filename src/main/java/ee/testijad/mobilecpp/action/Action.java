@@ -5,11 +5,13 @@ import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 public class Action {
 
@@ -65,22 +67,20 @@ public class Action {
 
     public static void waitForAndroidResult(AppiumDriver driver, int timeoutInSeconds) {
         System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
-        Instant startTime = Instant.now();
-        Instant endTime = startTime.plusSeconds(timeoutInSeconds);
-        while (Instant.now().isBefore(endTime)) {
-            try {
-                Thread.sleep(15000L);
-                System.out.println(String.format("++++++++++++ Result waiting sleep ended %s", Utils.getLocalTimeStamp()));
-                WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
-                if (waiter != null) {
-                    System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
-                    System.out.println(String.format(" ************ %s ************", driver.findElement(ANDROID_APP_DONE).getText()));
-                    break;
-                }
-            } catch (InterruptedException e) {
-                System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
+        try {
+            Thread.sleep(15000L);
+        } catch (InterruptedException e) {
+            System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
                 e.printStackTrace();
-            }
         }
+        System.out.println(String.format("++++++++++++ Result waiting sleep ended %s", Utils.getLocalTimeStamp()));
+        System.out.println("++++++++++++ \"DONE\" polling started");
+        // Throws error and prints 2 stack stack traces that can not be caught
+        new WebDriverWait(driver, timeoutInSeconds)
+                .pollingEvery(10, TimeUnit.SECONDS)
+                .withTimeout(timeoutInSeconds, TimeUnit.SECONDS)
+                .ignoring(WebDriverException.class)
+                .until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
+        System.out.println("++++++++++++ \"DONE\" polling ended");
     }
 }

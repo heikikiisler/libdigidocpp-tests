@@ -3,6 +3,9 @@ package ee.testijad.mobilecpp.tests;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
+/**
+ * Test listener to remove error stack traces from failed tests.
+ */
 public class TestListener extends TestListenerAdapter {
 
     @Override
