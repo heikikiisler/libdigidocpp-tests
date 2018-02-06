@@ -1,13 +1,13 @@
 package ee.testijad.mobilecpp.validation;
 
-import java.util.List;
+import java.util.Set;
 
 public class FileResult {
 
     private ResultType resultType;
-    private List<String> warnings;
+    private Set<String> warnings;
 
-    FileResult(ResultType resultType, List<String> errors) {
+    FileResult(ResultType resultType, Set<String> errors) {
         this.resultType = resultType;
         this.warnings = errors;
     }
@@ -16,7 +16,7 @@ public class FileResult {
         return resultType;
     }
 
-    public List<String> getWarnings() {
+    public Set<String> getWarnings() {
         return warnings;
     }
 

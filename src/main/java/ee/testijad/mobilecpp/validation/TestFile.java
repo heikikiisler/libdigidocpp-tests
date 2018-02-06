@@ -1,22 +1,22 @@
 package ee.testijad.mobilecpp.validation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TestFile {
 
     private String fileName;
     private ResultType expectedResultType;
-    private List<String> expectedWarnings;
+    private Set<String> expectedWarnings;
 
-    TestFile(String fileName, ResultType expectedResultType, List<String> expectedWarnings) {
+    TestFile(String fileName, ResultType expectedResultType, Set<String> expectedWarnings) {
         this.fileName = fileName;
         this.expectedResultType = expectedResultType;
         this.expectedWarnings = expectedWarnings;
     }
 
     static TestFile getWithoutWarnings(String fileName) {
-        return new TestFile(fileName, ResultType.OK, new ArrayList<>());
+        return new TestFile(fileName, ResultType.OK, new HashSet<>());
     }
 
     public String getFileName() {
@@ -27,7 +27,7 @@ public class TestFile {
         return expectedResultType;
     }
 
-    public List<String> getExpectedWarnings() {
+    public Set<String> getExpectedWarnings() {
         return expectedWarnings;
     }
 

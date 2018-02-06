@@ -1,19 +1,20 @@
 package ee.testijad.mobilecpp.validation;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ValidationFiles {
 
     private static final List<TestFile> testFiles = new ArrayList<>();
     private static final String SEPARATOR = "\t";
+    private static final String WARNINGS_SEPARATOR = "/n";
 
     static {
         ValidationFiles.addValidationFile(Config.VALIDATION_WARNING_FILE_PATH, ResultType.OK);
@@ -41,8 +42,11 @@ public class ValidationFiles {
                 if (!line.startsWith("#") && line.contains(SEPARATOR)) {
                     String[] row = line.split(SEPARATOR);
                     if (row.length >= 3) {
-                        testFiles.add(new TestFile(row[0], resultType, Arrays.asList(row[2].split("\\n"))));
-                        System.out.println(row[0]);
+                        testFiles.add(new TestFile(
+                                row[0],
+                                resultType,
+                                Utils.getWarningSetFromString(row[2], WARNINGS_SEPARATOR)
+                        ));
                     }
                 }
             }

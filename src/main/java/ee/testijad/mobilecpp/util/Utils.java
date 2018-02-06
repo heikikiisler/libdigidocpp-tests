@@ -10,9 +10,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Utils {
 
@@ -162,4 +160,16 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         return sdf.format(date);
     }
+
+    public static Set<String> getWarningSetFromString(String warningString, String separator) {
+        Set<String> warnings = new HashSet<>();
+        if (!warningString.equals("")) {
+            Arrays.stream(warningString.split(separator))
+                    .filter(warning -> !warning.equals(""))
+                    .map(String::trim)
+                    .forEach(warnings::add);
+        }
+        return warnings;
+    }
+
 }

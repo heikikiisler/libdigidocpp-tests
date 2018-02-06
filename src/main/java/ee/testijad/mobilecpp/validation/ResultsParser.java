@@ -16,6 +16,7 @@ import java.util.*;
 
 public class ResultsParser {
 
+    private static final String WARNINGS_SEPARATOR = "\\n";
     private List<Map<String, String>> results;
 
     private ResultsParser(String resultsFilePath) {
@@ -53,13 +54,8 @@ public class ResultsParser {
         for (Map<String, String> result : results) {
             if (result.get("f").equals(testFile.getFileName())) {
                 String resultString = result.get("s");
-                String warningsString = result.get("d");
-                List<String> warnings = new ArrayList<>();
-                if (!warningsString.equals("")) {
-                    Arrays.stream(warningsString.split("\\n"))
-                            .filter(warning -> !warning.equals(""))
-                            .forEach(warnings::add);
-                }
+                String warningString = result.get("d");
+                Set<String> warnings = Utils.getWarningSetFromString(warningString, WARNINGS_SEPARATOR);
                 return new FileResult(ResultType.get(resultString), warnings);
             }
         }
