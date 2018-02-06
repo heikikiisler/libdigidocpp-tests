@@ -8,13 +8,22 @@ appium {
    automationName="UiAutomator2"
   }
   ios {
-    appFileName="ee.ria.libdigidocpp-ios.ipa"
+    # If you need install validation bundle to phone before execution
+    # appFileName="ee.ria.libdigidocpp-ios.ipa"
+
     bundleId="ee.ria.libdigidocpp-ios"
     automationName="XCUITest"
+    # iOS device ID
+    # udid="0BE05697-763C-4611-87E5-DC488FC3CC26"
     xcode {
       showLog=true
       orgID="ABCD1234"
+      # For webdriver app signing
+      # keychainPath=""
+      # keychainPassword=""
     }
+    # Webdriver app bundle ID
+    # updateWdaBundleID="com.abcd.WebDriverAgent"
   }
   logLevel="info"
 }

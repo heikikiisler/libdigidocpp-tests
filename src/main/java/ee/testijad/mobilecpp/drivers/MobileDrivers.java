@@ -36,10 +36,16 @@ public class MobileDrivers {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.IOS);
-       // capabilities.setCapability(MobileCapabilityType.UDID, "0BE05697-763C-4611-87E5-DC488FC3CC26");
-        capabilities.setCapability(MobileCapabilityType.UDID, "4759aa88b2ca674040ed73890fcc1bfcf3beae92");
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "IOS device");
-        //  capabilities.setCapability(MobileCapabilityType.APP, Config.IOS_APP_FILE);
+
+        addStringCapabilityIfValueExists(capabilities, MobileCapabilityType.UDID, Config.IOS_UDID);
+        addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.XCODE_ORG_ID, Config.IOS_XCODE_ORG_ID);
+        addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.KEYCHAIN_PATH, Config.IOS_XCODE_KEYCHAIN_PATH);
+        addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.KEYCHAIN_PASSWORD, Config.IOS_XCODE_KEYCHAIN_PASSWORD);
+        addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.UPDATE_WDA_BUNDLEID, Config.IOS_WDA_BUNDLE_ID);
+        addStringCapabilityIfValueExists(capabilities, MobileCapabilityType.APP, Config.IOS_APP_FILE);
+        capabilities.setCapability(IOSMobileCapabilityType.SHOW_XCODE_LOG, Config.IOS_XCODE_SHOW_LOG);
+
         capabilities.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Config.IOS_BUNDLE_ID);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         capabilities.setCapability(IOSMobileCapabilityType.USE_PREBUILT_WDA, true);
@@ -58,5 +64,11 @@ public class MobileDrivers {
             e.printStackTrace();
         }
         return url;
+    }
+
+    private static void addStringCapabilityIfValueExists(DesiredCapabilities capabilities, String key, String value) {
+        if (value != null) {
+            capabilities.setCapability(key, value);
+        }
     }
 }

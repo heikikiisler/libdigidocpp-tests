@@ -32,9 +32,15 @@ public class Config {
 
     // Ios parameters
     public static final String IOS_BUNDLE_ID = CONFIG.getString("appium.ios.bundleId");
-    public static final String IOS_APP_FILE = CONFIG.getString("appium.ios.appFileName");
+    public static final String IOS_APP_FILE = getStringIfHasPath("appium.ios.appFileName");
 
     public static final String IOS_AUTOMATION_NAME = CONFIG.getString("appium.ios.automationName");
+    public static final String IOS_UDID = getStringIfHasPath("appium.ios.udid");
+    public static final String IOS_XCODE_ORG_ID = getStringIfHasPath("appium.ios.xcode.orgID");
+    public static final boolean IOS_XCODE_SHOW_LOG = getBooleanIfHasPath("appium.ios.xcode.showLog");
+    public static final String IOS_XCODE_KEYCHAIN_PATH = getStringIfHasPath("appium.ios.xcode.keychainPath");
+    public static final String IOS_XCODE_KEYCHAIN_PASSWORD = getStringIfHasPath("appium.ios.xcode.keychainPassword");
+    public static final String IOS_WDA_BUNDLE_ID = getStringIfHasPath("appium.ios.updateWdaBundleID");
 
     public static final String APPIUM_LOGLEVEL = getStringIfHasPath("appium.logLevel");
 
@@ -57,5 +63,12 @@ public class Config {
             return CONFIG.getString(path);
         }
         return null;
+    }
+
+    private static boolean getBooleanIfHasPath(String path) {
+        if(CONFIG.hasPath(path)) {
+            return CONFIG.getBoolean(path);
+        }
+        return false;
     }
 }
