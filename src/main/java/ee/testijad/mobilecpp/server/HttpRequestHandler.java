@@ -167,18 +167,14 @@ public class HttpRequestHandler implements Runnable {
             int len;
             int total = 0;
             int counter = 0;
-            try {
-                Thread.sleep(10000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             while ((len = in.read(buffer)) >= 0) {
                 System.out.println(String.format("**** Write started: %s , size: %s", String.valueOf(counter), String.valueOf(len)));
                 bufWriter.write(buffer, 0, len);
                 total += len;
                 System.out.println(String.format("**** Write ended: %s ,  copied: %s", String.valueOf(counter), String.valueOf(total)));
                 counter++;
-                if (total == contentLength) {
+                if (total == contentLength || !in.ready() ) {
                     break;
                 }
             }
@@ -192,27 +188,4 @@ public class HttpRequestHandler implements Runnable {
         System.out.println(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath,Utils.getLocalTimeStamp()));
         return 200;
     }
-
-    private static int writeFileByLines(BufferedReader in, String targetFilePath, int contentLength) {
-        File myFile = new File(targetFilePath);
-        BufferedWriter bufWriter;
-        System.out.println(String.format("Writing output file: %s", targetFilePath));
-        try {
-            bufWriter = new BufferedWriter(new FileWriter(myFile));
-            System.out.println(String.format("****************** File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                bufWriter.write(line);
-            }
-            bufWriter.flush();
-            bufWriter.close();
-            System.out.println(String.format("********************** File copy ended: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
-        } catch (IOException e) {
-            System.err.println(e);
-            return 304;
-        }
-        System.out.println(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath,Utils.getLocalTimeStamp()));
-        return 200;
-    }
-
 }
