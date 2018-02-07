@@ -49,10 +49,11 @@ public class Action {
     public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
         System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
         Instant startTime = Instant.now();
+        long delay = 1000L * Config.POLLING_START_DELAY;
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
         while (Instant.now().isBefore(endTime)) {
             try {
-                Thread.sleep(15000L);
+                Thread.sleep(delay);
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(IOS_APP_DONE));
                 if (waiter != null) {
                     System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
@@ -66,21 +67,21 @@ public class Action {
     }
 
     public static void waitForAndroidResult(AppiumDriver driver, int timeoutInSeconds) {
+        long delay = 1000L * Config.POLLING_START_DELAY;
         System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
         try {
-            Thread.sleep(15000L);
+            Thread.sleep(delay);
         } catch (InterruptedException e) {
             System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
                 e.printStackTrace();
         }
-        System.out.println(String.format("++++++++++++ Result waiting sleep ended %s", Utils.getLocalTimeStamp()));
-        System.out.println("++++++++++++ \"DONE\" polling started");
+        System.out.println(String.format("++++++++++++ \"DONE\" polling started %s", Utils.getLocalTimeStamp()));
         // Throws error and prints 2 stack stack traces that can not be caught
         new WebDriverWait(driver, timeoutInSeconds)
                 .pollingEvery(10, TimeUnit.SECONDS)
                 .withTimeout(timeoutInSeconds, TimeUnit.SECONDS)
                 .ignoring(WebDriverException.class)
                 .until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
-        System.out.println("++++++++++++ \"DONE\" polling ended");
+        System.out.println(String.format("++++++++++++ \"DONE\" polling ended %s", Utils.getLocalTimeStamp()) );
     }
 }

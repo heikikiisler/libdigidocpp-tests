@@ -20,9 +20,10 @@ public class Config {
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationErrorFileName");
     public static final String ZIP_FILE_DIRECTORY = CONFIG.getString("testParameters.zipFilePath");
 
-    public static final String LIB_LOG_FILE = CONFIG.getString("testParameters.libLogFileName");
-    public static final String RESULTS_FILE = CONFIG.getString("testParameters.resultsFileName");
+    // public static final String LIB_LOG_FILE = CONFIG.getString("testParameters.libLogFileName");
+    // public static final String RESULTS_FILE = CONFIG.getString("testParameters.resultsFileName");
     public static final int VALIDATION_TIMEOUT = CONFIG.getInt("testParameters.validationTimeOut");
+    public static final int POLLING_START_DELAY = CONFIG.getInt("testParameters.pollingStartDelay");
 
     // Android parameters
     public static final String ANDROID_APP_ID = CONFIG.getString("appium.android.appId");

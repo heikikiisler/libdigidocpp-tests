@@ -19,7 +19,7 @@ public class HttpRequestHandler implements Runnable {
     public void run() {
         System.out.println("Processing request on thread " + Thread.currentThread().getName());
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             OutputStream out = new BufferedOutputStream(socket.getOutputStream());
             PrintStream printStream = new PrintStream(out);
 
@@ -111,7 +111,7 @@ public class HttpRequestHandler implements Runnable {
     }
 
     private static void sendFile(InputStream file, OutputStream out) {
-        System.out.println("Starting file sending");
+        System.out.println(String.format("Starting file sending %s", Utils.getLocalTimeStamp()));
         try {
             byte[] buffer = new byte[1024 * 1024];
             int i = 0;
@@ -120,7 +120,7 @@ public class HttpRequestHandler implements Runnable {
                 System.out.println(String.format("[HTTP Server] Send file: index %s", String.valueOf(i)));
                 i++;
             }
-            System.out.println("File sending is complete");
+            System.out.println(String.format("File sending is complete %s", Utils.getLocalTimeStamp()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,11 +162,16 @@ public class HttpRequestHandler implements Runnable {
         System.out.println(String.format("Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
-            System.out.println(String.format("****************** File copy started: %s", targetFilePath));
-            char[] buffer = new char[1024 * 16];
+            System.out.println(String.format("****************** File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
+            char[] buffer = new char[(1024 * 64)];
             int len;
             int total = 0;
             int counter = 0;
+            try {
+                Thread.sleep(10000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             while ((len = in.read(buffer)) >= 0) {
                 System.out.println(String.format("**** Write started: %s , size: %s", String.valueOf(counter), String.valueOf(len)));
                 bufWriter.write(buffer, 0, len);
@@ -179,12 +184,34 @@ public class HttpRequestHandler implements Runnable {
             }
             bufWriter.flush();
             bufWriter.close();
-            System.out.println(String.format("********************** File copy ended: %s", targetFilePath));
+            System.out.println(String.format("********************** File copy ended: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e);
             return 304;
         }
-        System.out.println(String.format("[HTTP server] File %s writing succeeded", targetFilePath));
+        System.out.println(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath,Utils.getLocalTimeStamp()));
+        return 200;
+    }
+
+    private static int writeFileByLines(BufferedReader in, String targetFilePath, int contentLength) {
+        File myFile = new File(targetFilePath);
+        BufferedWriter bufWriter;
+        System.out.println(String.format("Writing output file: %s", targetFilePath));
+        try {
+            bufWriter = new BufferedWriter(new FileWriter(myFile));
+            System.out.println(String.format("****************** File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                bufWriter.write(line);
+            }
+            bufWriter.flush();
+            bufWriter.close();
+            System.out.println(String.format("********************** File copy ended: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
+        } catch (IOException e) {
+            System.err.println(e);
+            return 304;
+        }
+        System.out.println(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath,Utils.getLocalTimeStamp()));
         return 200;
     }
 

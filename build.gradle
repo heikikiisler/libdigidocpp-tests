@@ -71,6 +71,7 @@ task validationTest(type: Test) {
         suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
         useDefaultListeners = true
     }
+    outputs.upToDateWhen {false}
 }
 
 task androidTest(type: GradleBuild) {

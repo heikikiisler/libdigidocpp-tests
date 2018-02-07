@@ -157,7 +157,7 @@ public class Utils {
 
     public static String getLocalTimeStamp() {
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
         return sdf.format(date);
     }
 
