@@ -167,7 +167,11 @@ public class HttpRequestHandler implements Runnable {
             int len;
             int total = 0;
             int counter = 0;
-
+            try {
+                Thread.sleep(10000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             while ((len = in.read(buffer)) >= 0) {
                 System.out.println(String.format("**** Write started: %s , size: %s", String.valueOf(counter), String.valueOf(len)));
                 bufWriter.write(buffer, 0, len);
