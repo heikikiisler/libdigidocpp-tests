@@ -61,6 +61,11 @@ task validateWithIos(type: JavaExec) {
     outputs.upToDateWhen {false}
 }
 
+if (project.hasProperty('customResultsDir')) {
+    long epoch = new Date().getTime()/1000
+    testReportDirName = "${buildDir}/" + epoch
+}
+
 task validationTest(type: Test) {
     doFirst {
         if (project.hasProperty('resultsFile')) {
@@ -70,6 +75,7 @@ task validationTest(type: Test) {
     useTestNG() {
         suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
         useDefaultListeners = true
+   //     testLogging.showStandardStreams = true
     }
     outputs.upToDateWhen {false}
 }

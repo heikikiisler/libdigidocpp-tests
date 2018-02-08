@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.validation;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
@@ -21,12 +22,18 @@ public class ResultsParser {
     private static final String JSON_RESULT_KEY = "s";
     private static final String JSON_WARNINGS_KEY = "d";
     private List<Map<String, String>> results;
+    private String versionInfo;
 
     private ResultsParser(String resultsFilePath) {
         String contents = Utils.readFileIntoString(resultsFilePath);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            results = mapper.readValue(contents, new TypeReference<List<Map<String, String>>>(){});
+            JsonNode node = mapper.readValue(contents, JsonNode.class);
+            versionInfo = node.get("version").asText();
+            JsonNode resultNode = node.get("result");
+            results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, String>>>(){});
+            System.out.println(String.format("[Lib version] libdigidocpp version: %s from file: %s", versionInfo, resultsFilePath));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,4 +72,7 @@ public class ResultsParser {
         throw new RuntimeException(String.format("Could not find test file \"%s\" from results", testFile.getFileName()));
     }
 
+    public String getVersionInfo() {
+        return versionInfo;
+    }
 }
