@@ -17,6 +17,9 @@ import java.util.*;
 public class ResultsParser {
 
     private static final String WARNINGS_SEPARATOR = "\\n";
+    private static final String JSON_FILENAME_KEY = "f";
+    private static final String JSON_RESULT_KEY = "s";
+    private static final String JSON_WARNINGS_KEY = "d";
     private List<Map<String, String>> results;
 
     private ResultsParser(String resultsFilePath) {
@@ -52,9 +55,9 @@ public class ResultsParser {
 
     public FileResult getTestFileResult(TestFile testFile) {
         for (Map<String, String> result : results) {
-            if (result.get("f").equals(testFile.getFileName())) {
-                String resultString = result.get("s");
-                String warningString = result.get("d");
+            if (result.get(JSON_FILENAME_KEY).equals(testFile.getFileName())) {
+                String resultString = result.get(JSON_RESULT_KEY);
+                String warningString = result.get(JSON_WARNINGS_KEY);
                 Set<String> warnings = Utils.getWarningSetFromString(warningString, WARNINGS_SEPARATOR);
                 return new FileResult(ResultType.get(resultString), warnings);
             }

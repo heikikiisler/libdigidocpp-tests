@@ -37,6 +37,8 @@ testParameters {
   resultsFileName="result.json"
   # Signature files location
   dataFilesDirectory="dataFiles"
+  # Ignored files text file location
+  ignoredFilesFileName="dataFiles/ignored_files.txt"
   # Result files location
   resultFilesDirectory="results"
   # Validation timeOut in seconds

@@ -22,8 +22,8 @@ public class AppiumServer {
                 .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(Utils.getFreePort()))
                 .withArgument(GeneralServerFlag.LOG_TIMESTAMP)
                 .withArgument(GeneralServerFlag.LOCAL_TIMEZONE);
-        if(Config.APPIUM_LOGLEVEL != null) {
-            appiumServiceBuilder.withArgument(GeneralServerFlag.LOG_LEVEL, Config.APPIUM_LOGLEVEL);
+        if(Config.APPIUM_LOG_LEVEL != null) {
+            appiumServiceBuilder.withArgument(GeneralServerFlag.LOG_LEVEL, Config.APPIUM_LOG_LEVEL);
         }
         appiumService = AppiumDriverLocalService.buildService(appiumServiceBuilder);
         appiumService.start();

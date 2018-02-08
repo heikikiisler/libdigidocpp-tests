@@ -10,7 +10,7 @@ public class TestFile {
     private Set<String> expectedWarnings;
 
     TestFile(String fileName, ResultType expectedResultType, Set<String> expectedWarnings) {
-        this.fileName = fileName;
+        this.fileName = fileName.trim();
         this.expectedResultType = expectedResultType;
         this.expectedWarnings = expectedWarnings;
     }

@@ -12,11 +12,12 @@ public class Config {
 
     // Test parameters
     public static final String DATA_FILES_DIRECTORY = CONFIG.getString("testParameters.dataFilesDirectory");
+    public static final String IGNORED_FILES_FILE_NAME = getStringIfHasPath("testParameters.ignoredFilesFileName");
     public static final String RESULT_FILES_DIRECTORY = CONFIG.getString("testParameters.resultFilesDirectory");
     public static final String TEST_SUITE_FILE_DIRECTORY = CONFIG.getString("testSuiteFileDirectory");
-    public static final String VALIDATION_WARNING_FILE_PATH =
+    public static final String VALIDATION_WARNING_FILE_NAME =
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationWarningFileName");
-    public static final String VALIDATION_ERROR_FILE_PATH =
+    public static final String VALIDATION_ERROR_FILE_NAME =
             DATA_FILES_DIRECTORY + "/" + CONFIG.getString("testParameters.validationErrorFileName");
     public static final String ZIP_FILE_DIRECTORY = CONFIG.getString("testParameters.zipFilePath");
 
@@ -43,7 +44,7 @@ public class Config {
     public static final String IOS_XCODE_KEYCHAIN_PASSWORD = getStringIfHasPath("appium.ios.xcode.keychainPassword");
     public static final String IOS_WDA_BUNDLE_ID = getStringIfHasPath("appium.ios.updateWdaBundleID");
 
-    public static final String APPIUM_LOGLEVEL = getStringIfHasPath("appium.logLevel");
+    public static final String APPIUM_LOG_LEVEL = getStringIfHasPath("appium.logLevel");
 
     private static com.typesafe.config.Config getConfig() {
         File configFile = new File("properties.conf");
@@ -60,14 +61,14 @@ public class Config {
     }
 
     private static String getStringIfHasPath(String path) {
-        if(CONFIG.hasPath(path)) {
+        if (CONFIG.hasPath(path)) {
             return CONFIG.getString(path);
         }
         return null;
     }
 
     private static boolean getBooleanIfHasPath(String path) {
-        if(CONFIG.hasPath(path)) {
+        if (CONFIG.hasPath(path)) {
             return CONFIG.getBoolean(path);
         }
         return false;
