@@ -91,10 +91,6 @@ Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) m
 14. Install *Git* to access test code `brew install git`
 
 
-**Diagnostics**
-
-* TODO
-
 ## Running tests
 
 ##### Android
@@ -113,7 +109,8 @@ Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) m
 ##### For both mobile OS
 
 * Navigate to project root directory
-* Copy correct app file into project root directory and change app file name in the properties.conf file
+* Copy `properties.conf.sample` into new file in root directory named `properties.conf` if not yet exists
+  * For Android you should copy correct `apk` file into project root directory and change app file name in *android* section the properties.conf file
   * For iOS you should add correct parameter values for *udid* (device ID) and *bundleID* (validation app *bundleID*)  properties. 
 * Copy files for validation files into *dataFiles* directory
 * Copy expected result files ( if they exists ) into  *dataFiles* directory
