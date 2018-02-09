@@ -108,6 +108,7 @@ Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) m
 
 * Build validation app with XCode for specific iOS device and install it with XCode *play* button. If you have app signing problems you should change app *bundleID* in XCode project. Trust validation app in phone menu ( Settings -> General -> Device Management ) after installation. 
 * Open Webdriver agent ( WDA ) project (/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/WebDriverAgent.xcodeproj) with XCode. Build this app for specific iOS device.  If you have app signing problems you should change app bundleID in XCode project. Install app with XCode *play* button.
+* Share Mac Internet to iOS phone. ( System Preferences -> Sharing -> Internet Sharing -> iPhone USB )
 
 ##### For both mobile OS
 
