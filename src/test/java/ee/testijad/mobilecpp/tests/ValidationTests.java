@@ -47,18 +47,32 @@ public class ValidationTests {
     }
 
     private static String getSetComparisonErrorMessage(TestFile expected, FileResult result) {
-        return String.format("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+        return String.format("\n%s\n%s\n%s\n%s\n%s %s\n%s\n%s %s\n%s\n%s\n%s",
                 "--------------------------------------------------",
                 "[WARNINGS COMPARISON FAILURE:]",
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[All expected warnings:]",
-                String.join("\n", expected.getExpectedWarnings()),
+                joinWarnings(expected.getExpectedWarnings()),
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[All result warnings:]",
-                String.join("\n", result.getWarnings()),
+                joinWarnings(result.getWarnings()),
+                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
+                validationInfo(),
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[Result has all expected warnings]:"
         );
     }
 
+    private static String validationInfo() {
+        return String.format("*** libdigidocpp version: %s ; result file timestamp: %s ***",
+                resultsParser.getVersionInfo(), resultsParser.getTimestamp());
+    }
+
+    private static String joinWarnings(Set<String> warningsSet) {
+        if (warningsSet.size() > 0) {
+            return String.join("\n", warningsSet) + "\n";
+        } else {
+            return "";
+        }
+    }
 }

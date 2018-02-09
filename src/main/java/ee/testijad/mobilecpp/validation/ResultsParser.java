@@ -23,6 +23,7 @@ public class ResultsParser {
     private static final String JSON_WARNINGS_KEY = "d";
     private List<Map<String, String>> results;
     private String versionInfo;
+    private String timestamp;
 
     private ResultsParser(String resultsFilePath) {
         String contents = Utils.readFileIntoString(resultsFilePath);
@@ -30,6 +31,7 @@ public class ResultsParser {
         try {
             JsonNode node = mapper.readValue(contents, JsonNode.class);
             versionInfo = node.get("version").asText();
+            timestamp = node.get("start").asText();
             JsonNode resultNode = node.get("result");
             results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, String>>>(){});
             System.out.println(String.format("[Lib version] libdigidocpp version: %s from file: %s", versionInfo, resultsFilePath));
@@ -74,5 +76,9 @@ public class ResultsParser {
 
     public String getVersionInfo() {
         return versionInfo;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 }
