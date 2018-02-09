@@ -97,12 +97,25 @@ Automated tests for the [libdigidocpp](https://github.com/metsma/libdigidocpp) m
 
 ## Running tests
 
+##### Android
+
 * Connect single device through USB (Allow USB debugging from device settings).
 * Optional: Verify that devices are connected with the command `adb devices`. The output should
   include a list of connected devices with "device" after the UDID.
+* Test executor machine and phone must be in same network ( Wi-Fi ) where devices see each other. 
+
+##### iOS
+
+* Build validation app with XCode for specific iOS device and install it with XCode *play* button. If you have app signing problems you should change app *bundleID* in XCode project. Trust validation app in phone menu ( Settings -> General -> Device Management ) after installation. 
+* Open Webdriver agent ( WDA ) project (/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/WebDriverAgent.xcodeproj) with XCode. Build this app for specific iOS device.  If you have app signing problems you should change app bundleID in XCode project. Install app with XCode *play* button.
+
+##### For both mobile OS
+
 * Navigate to project root directory
 * Copy correct app file into project root directory and change app file name in the properties.conf file
-* Copy files for validation into dataFiles directory
+  * For iOS you should add correct parameter values for *udid* (device ID) and *bundleID* (validation app *bundleID*)  properties. 
+* Copy files for validation files into *dataFiles* directory
+* Copy expected result files ( if they exists ) into  *dataFiles* directory
 * For Windows replace `./gradlew` with `gradlew` in commands.
 * Recommended: add flag `--info` for more logging output.
 
@@ -114,7 +127,7 @@ Android device:
 
     ./gradlew androidTest --info
 
-iOS device(only on a Mac):
+iOS device (only on a Mac):
 
     ./gradlew iosTest --info
 
@@ -134,9 +147,9 @@ Generate TestNG XML file :
 
 Run the validation tests:
 
-_This will compare a result JSON file from the resultFilesDirectory defined in Config.
+This will compare a result JSON file from the resultFilesDirectory defined in Config.
 To compare with a specific file in the resultFilesDirectory, add a parameter:
--PresultsFile="resultsFileName". The latest results file is used by default._
+-PresultsFile="resultsFileName". The latest results file is used by default. 
 
     ./gradlew validationTest --info
 
@@ -151,4 +164,6 @@ Run everything together:
 
 **Test reports**
 
-Test report path will be printed after executing tests,  `build/reports/tests/validationTest/index.html` by default.
+Test report path will be printed after executing tests,  `build/reports/tests/validationTest/index.html` by default. 
+
+* To avoid reports overwriting you can add `-PcustomResultsDir` parameter for `androidTest` , `iosTest` or `validationTest` task. This creates html reports to timestamped subdirectory in `build/reports/tests` folder.
