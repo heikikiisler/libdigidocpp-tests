@@ -82,12 +82,6 @@ public class RunApps {
             appiumServer.stopServer();
         }
         if (httpServer != null) {
-            // Add some time to writing files down
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             httpServer.stopServer();
         }
 

@@ -17,7 +17,7 @@ public class HttpRequestHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Processing request on thread " + Thread.currentThread().getName());
+        System.out.println("[HTTP Server] Processing request on thread " + Thread.currentThread().getName());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             OutputStream out = new BufferedOutputStream(socket.getOutputStream());
@@ -80,24 +80,29 @@ public class HttpRequestHandler implements Runnable {
             } else {
                 System.out.println("[HTTP server] Processing GET request");
                 String fileRequest = request.substring(4, request.length() - 9).trim();
-                String fileName = "./" + Config.ZIP_FILE_DIRECTORY;
-                System.out.println(String.format("[HTTP server] Zip file name: %s", fileName));
-                File fileToSend = new File(fileName);
-                if (fileToSend.isDirectory() && !fileRequest.endsWith("/")) {
-                    printStream.print(String.format("HTTP/1.1\r\n 301 Moved Permanently<br> Location: http://%s:%s/%s/<br><br>"
-                            , socket.getLocalAddress().getHostAddress()
-                            , socket.getLocalPort(), fileRequest));
+                if (fileRequest.contains("/diag")) {
+                    System.out.println(String.format("[HTTP server] Handling diagnostic request"));
+                    printStream.print(String.format("HTTP/1.0 200 OK\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\nServer is visible!\r\n\r\n%s", Utils.getTimeStamp(), Utils.getLocalTimeStamp()));
                 } else {
-                    try {
-                        InputStream file = new FileInputStream(fileToSend);
-                        printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileName), Utils.getTimeStamp()));
+                    String fileName = "./" + Config.ZIP_FILE_DIRECTORY;
+                    System.out.println(String.format("[HTTP server] Zip file name: %s", fileName));
+                    File fileToSend = new File(fileName);
+                    if (fileToSend.isDirectory() && !fileRequest.endsWith("/")) {
+                        printStream.print(String.format("HTTP/1.0\r\n 301 Moved Permanently<br> Location: http://%s:%s/%s/<br><br>"
+                                , socket.getLocalAddress().getHostAddress()
+                                , socket.getLocalPort(), fileRequest));
+                    } else {
+                        try {
+                            InputStream file = new FileInputStream(fileToSend);
+                            printStream.print(String.format("HTTP/1.0 200 OK\r\nContent-Type: %s\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\n", selectMimeType(fileName), Utils.getTimeStamp()));
 
-                        sendFile(file, out);
-                    } catch (FileNotFoundException e) {
-                        generateError(printStream, socket, "404", "Not Found", "The requested URL was not found on this server.");
+                            sendFile(file, out);
+                        } catch (FileNotFoundException e) {
+                            generateError(printStream, socket, "404", "Not Found", "The requested URL was not found on this server.");
+                        }
                     }
                 }
-            }
+            } // GET request end
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,7 +116,7 @@ public class HttpRequestHandler implements Runnable {
     }
 
     private static void sendFile(InputStream file, OutputStream out) {
-        System.out.println(String.format("Starting file sending %s", Utils.getLocalTimeStamp()));
+        System.out.println(String.format("[HTTP Server] Starting file sending %s", Utils.getLocalTimeStamp()));
         try {
             byte[] buffer = new byte[1024 * 1024];
             int i = 0;
@@ -120,7 +125,7 @@ public class HttpRequestHandler implements Runnable {
                 System.out.println(String.format("[HTTP Server] Send file: index %s", String.valueOf(i)));
                 i++;
             }
-            System.out.println(String.format("File sending is complete %s", Utils.getLocalTimeStamp()));
+            System.out.println(String.format("[HTTP Server] File sending is complete %s", Utils.getLocalTimeStamp()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,7 +164,7 @@ public class HttpRequestHandler implements Runnable {
     private static int writeFile(BufferedReader in, String targetFilePath, int contentLength) {
         File myFile = new File(targetFilePath);
         BufferedWriter bufWriter;
-        System.out.println(String.format("Writing output file: %s", targetFilePath));
+        System.out.println(String.format("[HTTP Server] Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
             System.out.println(String.format("****************** File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));

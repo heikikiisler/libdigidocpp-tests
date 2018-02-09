@@ -34,7 +34,7 @@ public class Action {
     public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
         System.out.println(String.format("++++++++++++ Paste sleep started %s", Utils.getLocalTimeStamp()));
         try {
-            Thread.sleep(20000L);
+            Thread.sleep(15000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,11 +77,22 @@ public class Action {
         }
         System.out.println(String.format("++++++++++++ \"DONE\" polling started %s", Utils.getLocalTimeStamp()));
         // Throws error and prints 2 stack stack traces that can not be caught
-        new WebDriverWait(driver, timeoutInSeconds)
-                .pollingEvery(10, TimeUnit.SECONDS)
-                .withTimeout(timeoutInSeconds, TimeUnit.SECONDS)
-                .ignoring(WebDriverException.class)
-                .until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
-        System.out.println(String.format("++++++++++++ \"DONE\" polling ended %s", Utils.getLocalTimeStamp()) );
+        boolean success = false;
+        try {
+            WebElement waiter = new WebDriverWait(driver, timeoutInSeconds)
+                    .pollingEvery(10, TimeUnit.SECONDS)
+                    .withTimeout(timeoutInSeconds, TimeUnit.SECONDS)
+                    .ignoring(WebDriverException.class)
+                    .until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
+            if (waiter != null) {
+                System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
+                success = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!success) {
+            System.out.println(String.format("++++++++++++ \"DONE\" polling ended with error ************************** %s", Utils.getLocalTimeStamp()));
+        }
     }
 }

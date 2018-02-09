@@ -42,7 +42,7 @@ testParameters {
   # Result files location
   resultFilesDirectory="results"
   # Validation timeOut in seconds
-  validationTimeOut=300
+  validationTimeOut=100
   # Delay before start result polling in seconds
   pollingStartDelay=30
   validationWarningFileName="valid_files.txt"
