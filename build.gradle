@@ -89,6 +89,7 @@ task androidTest(type: GradleBuild) {
     doLast {
         validationTest.execute()
     }
+    outputs.upToDateWhen {false}
 }
 
 task iosTest(type: GradleBuild) {
