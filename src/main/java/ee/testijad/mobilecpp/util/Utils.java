@@ -1,12 +1,7 @@
 package ee.testijad.mobilecpp.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -129,10 +124,14 @@ public class Utils {
 
     public static String getHostAddress() {
         String hostAddress = null;
-        try {
-            hostAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        if (Config.HTTP_SERVER_HOST != null) {
+            hostAddress = Config.HTTP_SERVER_HOST;
+        } else {
+            try {
+                hostAddress = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         }
         return hostAddress;
     }
@@ -170,6 +169,52 @@ public class Utils {
                     .forEach(warnings::add);
         }
         return warnings;
+    }
+
+    public static boolean verifyHttpServer(String urlString) {
+        boolean result = false;
+        HttpURLConnection urlconnection = null;
+        try {
+            URL url = new URL(urlString);
+            urlconnection = (HttpURLConnection) url.openConnection();
+            urlconnection.setRequestMethod("GET");
+            urlconnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            int responseCode =  urlconnection.getResponseCode();
+            BufferedReader in = new BufferedReader( new InputStreamReader(urlconnection.getInputStream()));
+            String inputLine;
+            if((inputLine = in.readLine()) != null) {
+                result = true;
+            }
+            in.close();
+           urlconnection.disconnect();
+        }
+        catch(Exception e) {
+        }
+        return result;
+    }
+
+    public static void myIPAddress() {
+        System.out.println("***************** Up and running network interfaces *****************");
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                // drop inactive
+                if (!networkInterface.isUp() )
+                    continue;
+
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    System.out.println(String.format("Interface name: [ %s ] --> ip: %s",
+                            networkInterface.getDisplayName(), addr.getHostAddress()));
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        System.out.println("***************** *****************");
     }
 
 }

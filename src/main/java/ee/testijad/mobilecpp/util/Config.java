@@ -25,6 +25,7 @@ public class Config {
     // public static final String RESULTS_FILE = CONFIG.getString("testParameters.resultsFileName");
     public static final int VALIDATION_TIMEOUT = CONFIG.getInt("testParameters.validationTimeOut");
     public static final int POLLING_START_DELAY = CONFIG.getInt("testParameters.pollingStartDelay");
+    public static final String HTTP_SERVER_HOST = getStringIfHasPath("testParameters.httpServerHostName");
 
     // Android parameters
     public static final String ANDROID_APP_ID = CONFIG.getString("appium.android.appId");

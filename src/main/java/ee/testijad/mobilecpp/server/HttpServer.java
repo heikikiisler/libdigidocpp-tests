@@ -32,7 +32,7 @@ public class HttpServer implements Runnable {
                 thread.start();
                 System.out.println("[HTTP server] Started HttpRequestHandler");
             } catch (SocketException e) {
-                System.out.println("[HTTP server] Closed serverSocket");
+                System.out.println("[HTTP server] Closed serverSocket on port " + port);
             } catch (IOException e) {
                 e.printStackTrace();
             }

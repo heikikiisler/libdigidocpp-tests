@@ -81,15 +81,25 @@ task validationTest(type: Test) {
 }
 
 task androidTest(type: GradleBuild) {
-    tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
-    // TODO add dependency for generate suite and validation test if validateWithAndroid fails
+  //  tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
+    dependsOn = ['prepareValidationZipFile', 'generateSuite']
+    doFirst {
+        validateWithAndroid.execute()
+    }
+    doLast {
+        validationTest.execute()
+    }
 }
 
 task iosTest(type: GradleBuild) {
     tasks = ['prepareValidationZipFile', 'validateWithIos', 'generateSuite', 'validationTest']
 }
 
-// TODO Add diagnostic http server task for Android here
+task diagnosticHttpServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ee.testijad.mobilecpp.server.HttpServerRunner"
+    outputs.upToDateWhen {false}
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
