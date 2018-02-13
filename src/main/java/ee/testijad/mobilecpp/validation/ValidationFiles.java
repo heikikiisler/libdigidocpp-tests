@@ -4,8 +4,6 @@ import ee.testijad.mobilecpp.util.Config;
 import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +12,12 @@ public class ValidationFiles {
     private static final List<TestFile> TEST_FILES = new ArrayList<>();
     private static final String SEPARATOR = "\t";
     private static final String WARNINGS_SEPARATOR = "/n";
+    private static final int LIBDIGIDOCPP_WARNING_ROW = 2;
+    private static final int DDOC_WARNING_ROW = 4;
 
     static {
-        ValidationFiles.addValidationFile(Config.VALIDATION_WARNING_FILE_NAME, ResultType.OK);
-        ValidationFiles.addValidationFile(Config.VALIDATION_ERROR_FILE_NAME, ResultType.NOT);
+        ValidationFiles.addValidationFile(Config.VALIDATION_WARNING_FILE_NAME, ResultType.OK, LIBDIGIDOCPP_WARNING_ROW);
+        ValidationFiles.addValidationFile(Config.VALIDATION_ERROR_FILE_NAME, ResultType.NOT, LIBDIGIDOCPP_WARNING_ROW);
     }
 
     /**
@@ -34,18 +34,18 @@ public class ValidationFiles {
         return TestFile.getWithoutWarnings(fileName);
     }
 
-    private static void addValidationFile(String fileName, ResultType resultType) {
+    private static void addValidationFile(String fileName, ResultType resultType, int warningRow) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (!line.startsWith("#") && line.contains(SEPARATOR)) {
                     String[] row = line.split(SEPARATOR);
-                    if (row.length >= 3) {
+                    if (row.length >= warningRow + 1) {
                         String testFileName = row[0].trim();
                         TEST_FILES.add(new TestFile(
                                 testFileName,
                                 resultType,
-                                Utils.getWarningSetFromString(row[2], WARNINGS_SEPARATOR)
+                                Utils.getWarningSetFromString(row[warningRow], WARNINGS_SEPARATOR)
                         ));
                     }
                 }

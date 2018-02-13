@@ -49,6 +49,8 @@ public class ValidationTests {
     private static String getSetComparisonErrorMessage(TestFile expected, FileResult result) {
         return String.format("\n%s\n%s\n%s\n%s\n%s %s\n%s\n%s %s\n%s\n%s\n%s",
                 "--------------------------------------------------",
+                validationInfo(),
+                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[WARNINGS COMPARISON FAILURE:]",
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[All expected warnings:]",
@@ -56,8 +58,6 @@ public class ValidationTests {
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[All result warnings:]",
                 joinWarnings(result.getWarnings()),
-                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
-                validationInfo(),
                 "- - - - - - - - - - - - - - - - - - - - - - - - - ",
                 "[Result has all expected warnings]:"
         );

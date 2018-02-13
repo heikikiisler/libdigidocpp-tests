@@ -21,13 +21,12 @@ public class RunApps {
 
     public static void main(String[] args) {
         System.out.println(String.format("Starting %s validation app", System.getProperty("mobilecpp.os")));
+        setUp();
         switch (System.getProperty("mobilecpp.os").toLowerCase()) {
             case "android":
-                setUp();
                 runAndroidApp();
                 break;
             case "ios":
-                setUp();
                 runIosApp();
                 break;
             default:
@@ -48,30 +47,30 @@ public class RunApps {
     private static void runAndroidApp() {
         System.out.println("Action");
         Instant start, end;
-        double gap = 0;
         AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidationAndroid(driver, baseUrl);
         start = Instant.now();
-        Action.waitForAndroidResult(driver, Config.VALIDATION_TIMEOUT);
-        end = Instant.now();
-        if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
+        try {
+            Action.waitForAndroidResult(driver, Config.VALIDATION_TIMEOUT);
+        } catch (Exception e) {
+            teardown();
+            System.exit(1);
+            e.printStackTrace();
         }
+        end = Instant.now();
+        double gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         System.out.println(String.format("Working time: %.3f seconds ", gap));
     }
 
     private static void runIosApp() {
         System.out.println("Action");
         Instant start, end;
-        double gap = 0;
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidation(driver, baseUrl);
         start = Instant.now();
         Action.waitForIosResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
-        if (start != null) {
-            gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
-        }
+        double gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
         System.out.println(String.format("Working time: %.3f seconds ", gap));
     }
 

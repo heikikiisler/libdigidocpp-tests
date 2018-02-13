@@ -39,7 +39,6 @@ public class XmlFileBuilder {
             xmlClasses.add(clazz);
             myTest.setXmlClasses(xmlClasses);
         }
-        System.out.println(suite.toXml());
         saveSuiteFile(suite, Config.TEST_SUITE_FILE_DIRECTORY);
     }
 

@@ -44,9 +44,6 @@ task generateSuite(type: JavaExec) {
 }
 
 task validateWithAndroid(type: JavaExec) {
-    doFirst {
-        systemProperty 'mobilecpp.os', 'android'
-    }
     classpath = sourceSets.main.runtimeClasspath
     main = "ee.testijad.mobilecpp.app.RunApps"
     outputs.upToDateWhen {false}
@@ -81,15 +78,7 @@ task validationTest(type: Test) {
 }
 
 task androidTest(type: GradleBuild) {
-  //  tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
-    dependsOn = ['prepareValidationZipFile', 'generateSuite']
-    doFirst {
-        validateWithAndroid.execute()
-    }
-    doLast {
-        validationTest.execute()
-    }
-    outputs.upToDateWhen {false}
+    tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
 }
 
 task iosTest(type: GradleBuild) {
