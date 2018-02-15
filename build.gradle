@@ -44,6 +44,9 @@ task generateSuite(type: JavaExec) {
 }
 
 task validateWithAndroid(type: JavaExec) {
+    doFirst {
+        systemProperty 'mobilecpp.os', 'android'
+    }
     classpath = sourceSets.main.runtimeClasspath
     main = "ee.testijad.mobilecpp.app.RunApps"
     outputs.upToDateWhen {false}

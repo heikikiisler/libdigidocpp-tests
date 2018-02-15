@@ -12,6 +12,7 @@ public class ValidationFiles {
     private static final List<TestFile> TEST_FILES = new ArrayList<>();
     private static final String SEPARATOR = "\t";
     private static final String WARNINGS_SEPARATOR = "/n";
+    private static final int TEST_FILE_NAME_ROW = 0;
     private static final int LIBDIGIDOCPP_WARNING_ROW = 2;
     private static final int DDOC_WARNING_ROW = 4;
 
@@ -41,7 +42,7 @@ public class ValidationFiles {
                 if (!line.startsWith("#") && line.contains(SEPARATOR)) {
                     String[] row = line.split(SEPARATOR);
                     if (row.length >= warningRow + 1) {
-                        String testFileName = row[0].trim();
+                        String testFileName = row[TEST_FILE_NAME_ROW].trim();
                         TEST_FILES.add(new TestFile(
                                 testFileName,
                                 resultType,

@@ -5,6 +5,7 @@ import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -76,7 +77,6 @@ public class Action {
                 e.printStackTrace();
         }
         System.out.println(String.format("++++++++++++ \"DONE\" polling started %s", Utils.getLocalTimeStamp()));
-        // Throws error and prints 2 stack stack traces that can not be caught
         try {
             WebElement waiter = new WebDriverWait(driver, timeoutInSeconds)
                     .pollingEvery(10, TimeUnit.SECONDS)
@@ -87,7 +87,8 @@ public class Action {
                 System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
                 return;
             }
-        } catch (Exception e) {
+        } catch (TimeoutException e) {
+            System.out.println(String.format("++++++++++++ \"DONE\" Polling timeout: waited for %s seconds", timeoutInSeconds));
             e.printStackTrace();
         }
         throw new Exception(String.format("++++++++++++ \"DONE\" polling ended with error ************************** %s", Utils.getLocalTimeStamp()));
