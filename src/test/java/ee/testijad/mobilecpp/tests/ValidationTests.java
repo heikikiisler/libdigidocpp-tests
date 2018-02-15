@@ -30,11 +30,6 @@ public class ValidationTests {
                 "\n--------------------------------------------------\n[Result comparison (OK or NOT)]:"
         );
         compareSets(
-                expected.getExpectedWarnings(),
-                result.getWarnings(),
-                getSetComparisonErrorMessage(expected, result)
-        );
-        compareSets(
                 result.getWarnings(),
                 expected.getExpectedWarnings(),
                 getSetComparisonErrorMessage(expected, result)
@@ -42,24 +37,35 @@ public class ValidationTests {
         softAssert.assertAll();
     }
 
-    private void compareSets(Set<String> container, Set<String> contained, String errorMessage) {
-        softAssert.assertTrue(container.containsAll(contained), errorMessage);
+    private void compareSets(Set<String> resultWarnings, Set<String> expectedWarnings, String errorMessage) {
+        boolean containsAll = true;
+        for (String expectedWarning : expectedWarnings) {
+            boolean containsWarning = false;
+            for (String resultWarning : resultWarnings) {
+                if (resultWarning.contains(expectedWarning)) {
+                    containsWarning = true;
+                    break;
+                }
+            }
+            if (!containsWarning) {
+                containsAll = false;
+                break;
+            }
+        }
+        softAssert.assertTrue(containsAll, errorMessage);
     }
 
     private static String getSetComparisonErrorMessage(TestFile expected, FileResult result) {
-        return String.format("\n%s\n%s\n%s\n%s\n%s %s\n%s\n%s %s\n%s\n%s\n%s",
-                "--------------------------------------------------",
+        return String.format("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+                "---------------------------------------------------",
                 validationInfo(),
-                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
+                "- - - - - - - - - - - - - - - - - - - - - - - - - -",
                 "[WARNINGS COMPARISON FAILURE:]",
-                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
-                "[All expected warnings:]",
+                "- - - - - [All expected warnings:] - - - - - - - - ",
                 joinWarnings(expected.getExpectedWarnings()),
-                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
-                "[All result warnings:]",
+                "- - - - - [All result warnings:] - - - - - - - - - ",
                 joinWarnings(result.getWarnings()),
-                "- - - - - - - - - - - - - - - - - - - - - - - - - ",
-                "[Result has all expected warnings]:"
+                "- - - - - [Result has all expected warnings]: - - -"
         );
     }
 

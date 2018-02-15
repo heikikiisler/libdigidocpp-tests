@@ -14,7 +14,7 @@ public class ValidationFiles {
     private static final String WARNINGS_SEPARATOR = "/n";
     private static final int TEST_FILE_NAME_ROW = 0;
     private static final int LIBDIGIDOCPP_WARNING_ROW = 2;
-    private static final int DDOC_WARNING_ROW = 4;
+    private static final int DDOC_WARNING_ROW = 1;
 
     static {
         ValidationFiles.addValidationFile(Config.VALIDATION_WARNING_FILE_NAME, ResultType.OK, LIBDIGIDOCPP_WARNING_ROW);
@@ -43,10 +43,15 @@ public class ValidationFiles {
                     String[] row = line.split(SEPARATOR);
                     if (row.length >= warningRow + 1) {
                         String testFileName = row[TEST_FILE_NAME_ROW].trim();
+                        int fileWarningRow = warningRow;
+                        if (testFileName.endsWith(".ddoc")) {
+                            System.out.println("Filename: " + testFileName);
+                            fileWarningRow = DDOC_WARNING_ROW;
+                        }
                         TEST_FILES.add(new TestFile(
                                 testFileName,
                                 resultType,
-                                Utils.getWarningSetFromString(row[warningRow], WARNINGS_SEPARATOR)
+                                Utils.getWarningSetFromString(row[fileWarningRow], WARNINGS_SEPARATOR)
                         ));
                     }
                 }
