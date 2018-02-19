@@ -18,12 +18,12 @@ public class ValidationTests {
     @Test
     @Parameters({"fileName"})
     public void validateTestFile(String fileName) {
+        if (IgnoredFiles.isIgnored(fileName)) {
+            throw new SkipException(fileName);
+        }
         TestFile expected = ValidationFiles.getExpectedTestFile(fileName);
         FileResult result = resultsParser.getTestFileResult(expected);
         softAssert = new SoftAssert();
-        if (IgnoredFiles.isIgnored(expected.getFileName())) {
-            throw new SkipException(String.format("Filename %s is ignored", expected.getFileName()));
-        }
         softAssert.assertEquals(
                 result.getResultType(),
                 expected.getExpectedResultType(),
@@ -60,7 +60,7 @@ public class ValidationTests {
                 "---------------------------------------------------",
                 validationInfo(),
                 "- - - - - - - - - - - - - - - - - - - - - - - - - -",
-                "[WARNINGS COMPARISON FAILURE:]",
+                "- - - - - [WARNINGS COMPARISON FAILURE] - - - - - -",
                 "- - - - - [All expected warnings:] - - - - - - - - ",
                 joinWarnings(expected.getExpectedWarnings()),
                 "- - - - - [All result warnings:] - - - - - - - - - ",

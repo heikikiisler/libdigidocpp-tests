@@ -46,7 +46,6 @@ public class ValidationFiles {
                         String testFileName = row[TEST_FILE_NAME_ROW].trim();
                         int fileWarningRow = warningRow;
                         if (testFileName.endsWith(".ddoc")) {
-                            Log.info("Filename: " + testFileName);
                             fileWarningRow = DDOC_WARNING_ROW;
                         }
                         TEST_FILES.add(new TestFile(

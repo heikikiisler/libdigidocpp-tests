@@ -129,8 +129,11 @@ To compare with a specific file in the resultFilesDirectory, add a parameter:
 or
 
     ./gradlew validationTest --info -PresultsFile="resultsFileName"
+
 **Test reports**
 
 Test report path will be printed after executing tests,  `build/reports/tests/validationTest/index.html` by default. 
 
 * To avoid reports overwriting you can add `-PcustomResultsDir` parameter for `androidTest` , `iosTest` or `validationTest` task. This creates HTML reports to timestamped subdirectory in `build/reports/tests` folder.
+
+To ignore certain files in tests, add lines to `dataFiles/ignored_files.txt` separated by comma: `file name,ignore message`

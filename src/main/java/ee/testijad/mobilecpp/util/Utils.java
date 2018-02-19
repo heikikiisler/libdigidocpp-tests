@@ -165,7 +165,7 @@ public class Utils {
         if (!warningString.equals("")) {
             Arrays.stream(warningString.split(separator))
                     .filter(warning -> !warning.equals(""))
-                    .map(warning -> warning.replaceAll("ERROR: [0-9]+ - ", ""))
+                    .map(warning -> warning.replaceAll("(ERROR|WARNING): [0-9]+ - ", ""))
                     .map(String::trim)
                     .forEach(warnings::add);
         }
