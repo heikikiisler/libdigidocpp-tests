@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.action;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
@@ -33,22 +34,22 @@ public class Action {
     }
 
     public static void pasteHttpServerUrlAndRunValidationAndroid(AppiumDriver driver, String url) {
-        System.out.println(String.format("++++++++++++ Paste sleep started %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("Paste sleep started %s", Utils.getLocalTimeStamp()));
         try {
             Thread.sleep(15000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(String.format("+++++++++++++ Paste sleep ended %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("Paste sleep ended %s", Utils.getLocalTimeStamp()));
         new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated(URL_FIELD_ANDROID));
-        System.out.println(String.format("+++++++++++++ URL field waiting ended %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("URL field waiting ended %s", Utils.getLocalTimeStamp()));
         driver.findElement(URL_FIELD_ANDROID).sendKeys(url);
         driver.findElement(RUN_BUTTON_ANDROID).click();
-        System.out.println(String.format("+++++++++++++ Clicked %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("Clicked %s", Utils.getLocalTimeStamp()));
     }
 
     public static void waitForIosResult(AppiumDriver driver, int timeoutInSeconds) {
-        System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("Result waiting started %s", Utils.getLocalTimeStamp()));
         Instant startTime = Instant.now();
         long delay = 1000L * Config.POLLING_START_DELAY;
         Instant endTime = startTime.plusSeconds(timeoutInSeconds);
@@ -57,11 +58,11 @@ public class Action {
                 Thread.sleep(delay);
                 WebElement waiter = new WebDriverWait(driver, timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(IOS_APP_DONE));
                 if (waiter != null) {
-                    System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
+                    Log.info(String.format("DONE%s", Utils.getLocalTimeStamp()));
                     break;
                 }
             } catch (InterruptedException e) {
-                System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
+                Log.error(String.format("Error %s", Utils.getLocalTimeStamp()));
                 e.printStackTrace();
             }
         }
@@ -69,14 +70,14 @@ public class Action {
 
     public static void waitForAndroidResult(AppiumDriver driver, int timeoutInSeconds) throws Exception {
         long delay = 1000L * Config.POLLING_START_DELAY;
-        System.out.println(String.format("++++++++++++ Result waiting started %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("Result waiting started %s", Utils.getLocalTimeStamp()));
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
-            System.out.println(String.format("++++++++++++ Error %s", Utils.getLocalTimeStamp()));
-                e.printStackTrace();
+            Log.error(String.format("Error %s", Utils.getLocalTimeStamp()));
+            e.printStackTrace();
         }
-        System.out.println(String.format("++++++++++++ \"DONE\" polling started %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("\"DONE\" polling started %s", Utils.getLocalTimeStamp()));
         try {
             WebElement waiter = new WebDriverWait(driver, timeoutInSeconds)
                     .pollingEvery(10, TimeUnit.SECONDS)
@@ -84,13 +85,13 @@ public class Action {
                     .ignoring(WebDriverException.class)
                     .until(ExpectedConditions.visibilityOfElementLocated(ANDROID_APP_DONE));
             if (waiter != null) {
-                System.out.println(String.format(" ******************************************** DONE ********************************** %s", Utils.getLocalTimeStamp()));
+                Log.info(String.format("DONE %s", Utils.getLocalTimeStamp()));
                 return;
             }
         } catch (TimeoutException e) {
-            System.out.println(String.format("++++++++++++ \"DONE\" Polling timeout: waited for %s seconds", timeoutInSeconds));
+            Log.error(String.format("\"DONE\" Polling timeout: waited for %s seconds", timeoutInSeconds));
             e.printStackTrace();
         }
-        throw new Exception(String.format("++++++++++++ \"DONE\" polling ended with error ************************** %s", Utils.getLocalTimeStamp()));
+        throw new Exception(String.format("\"DONE\" polling ended with error %s", Utils.getLocalTimeStamp()));
     }
 }

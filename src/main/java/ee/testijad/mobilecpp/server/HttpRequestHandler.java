@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.server;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
@@ -17,7 +18,7 @@ public class HttpRequestHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("[HTTP Server] Processing request on thread " + Thread.currentThread().getName());
+        Log.info("[HTTP Server] Processing request on thread " + Thread.currentThread().getName());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             OutputStream out = new BufferedOutputStream(socket.getOutputStream());
@@ -32,7 +33,7 @@ public class HttpRequestHandler implements Runnable {
             String misc;
             while (true) {
                 misc = in.readLine();
-                System.out.println(String.format("[HTTP header] %s", misc));
+                Log.info(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
                     contentLength = Integer.parseInt(misc.split(":")[1].trim());
                     if (contentLength == 0) {
@@ -40,7 +41,7 @@ public class HttpRequestHandler implements Runnable {
                     }
                 }
                 if (misc.startsWith("Content-Type:")) {
-                    System.out.println(misc);
+                    Log.info(misc);
                     contentType = misc.split(":")[1].trim().toLowerCase();
                 }
 
@@ -51,7 +52,7 @@ public class HttpRequestHandler implements Runnable {
 
             if (!request.startsWith("GET") || request.length() < 14 || !request.endsWith("HTTP/1.1")) {
                 if (request.startsWith("PUT") & request.length() > 14 & request.endsWith("HTTP/1.1")) {
-                    System.out.println("[HTTP server] Processing PUT request");
+                    Log.info("[HTTP server] Processing PUT request");
                     String file = "a.b";
                     if (contentType.startsWith("text/plain")) {
                         file = "digidocpp.log";
@@ -62,7 +63,7 @@ public class HttpRequestHandler implements Runnable {
                     String targetFile = targetFilePath(file);
                     // String fileRequest = request.substring(4, request.length() - 9).trim();
                     if (!bufferIsEmpty) {
-                        System.out.println(String.format("[HTTP server] Source file: %s", file));
+                        Log.info(String.format("[HTTP server] Source file: %s", file));
                         int fileSaveResult = writeFile(in, targetFile, contentLength);
 
                         if (fileSaveResult == 200) {
@@ -78,14 +79,14 @@ public class HttpRequestHandler implements Runnable {
                     generateError(printStream, socket, "400", "Bad Request", "Your browser sent a request that this server could not understand.");
                 }
             } else {
-                System.out.println("[HTTP server] Processing GET request");
+                Log.info("[HTTP server] Processing GET request");
                 String fileRequest = request.substring(4, request.length() - 9).trim();
                 if (fileRequest.contains("/diag")) {
-                    System.out.println(String.format("[HTTP server] Handling diagnostic request"));
+                    Log.info("[HTTP server] Handling diagnostic request");
                     printStream.print(String.format("HTTP/1.0 200 OK\r\nDate: %s\r\nServer: HTTP Server 1.0\r\n\r\nServer is visible!\r\n\r\n%s", Utils.getTimeStamp(), Utils.getLocalTimeStamp()));
                 } else {
                     String fileName = "./" + Config.ZIP_FILE_DIRECTORY;
-                    System.out.println(String.format("[HTTP server] Zip file name: %s", fileName));
+                    Log.info(String.format("[HTTP server] Zip file name: %s", fileName));
                     File fileToSend = new File(fileName);
                     if (fileToSend.isDirectory() && !fileRequest.endsWith("/")) {
                         printStream.print(String.format("HTTP/1.0\r\n 301 Moved Permanently<br> Location: http://%s:%s/%s/<br><br>"
@@ -112,20 +113,20 @@ public class HttpRequestHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("[HTTP server] Processing finished on thread " + Thread.currentThread().getName());
+        Log.info("[HTTP server] Processing finished on thread " + Thread.currentThread().getName());
     }
 
     private static void sendFile(InputStream file, OutputStream out) {
-        System.out.println(String.format("[HTTP Server] Starting file sending %s", Utils.getLocalTimeStamp()));
+        Log.info(String.format("[HTTP Server] Starting file sending %s", Utils.getLocalTimeStamp()));
         try {
             byte[] buffer = new byte[1024 * 1024];
             int i = 0;
             while (file.available() > 0) {
                 out.write(buffer, 0, file.read(buffer));
-                System.out.println(String.format("[HTTP Server] Send file: index %s", String.valueOf(i)));
+                Log.info(String.format("[HTTP Server] Send file: index %s", String.valueOf(i)));
                 i++;
             }
-            System.out.println(String.format("[HTTP Server] File sending is complete %s", Utils.getLocalTimeStamp()));
+            Log.info(String.format("[HTTP Server] File sending is complete %s", Utils.getLocalTimeStamp()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,10 +165,10 @@ public class HttpRequestHandler implements Runnable {
     private static int writeFile(BufferedReader in, String targetFilePath, int contentLength) {
         File myFile = new File(targetFilePath);
         BufferedWriter bufWriter;
-        System.out.println(String.format("[HTTP Server] Writing output file: %s", targetFilePath));
+        Log.info(String.format("[HTTP Server] Writing output file: %s", targetFilePath));
         try {
             bufWriter = new BufferedWriter(new FileWriter(myFile));
-            System.out.println(String.format("****************** File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
+            Log.info(String.format("File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
             char[] buffer = new char[(1024 * 64)];
             int len;
             int total = 0;
@@ -178,23 +179,23 @@ public class HttpRequestHandler implements Runnable {
                 e.printStackTrace();
             }
             while ((len = in.read(buffer)) >= 0) {
-                System.out.println(String.format("**** Write started: %s , size: %s", String.valueOf(counter), String.valueOf(len)));
+                Log.info(String.format("Write started: %s, size: %s", String.valueOf(counter), String.valueOf(len)));
                 bufWriter.write(buffer, 0, len);
                 total += len;
-                System.out.println(String.format("**** Write ended: %s ,  copied: %s", String.valueOf(counter), String.valueOf(total)));
+                Log.info(String.format("Write ended: %s,  copied: %s", String.valueOf(counter), String.valueOf(total)));
                 counter++;
-                if (total == contentLength || !in.ready() ) {
+                if (total == contentLength || !in.ready()) {
                     break;
                 }
             }
             bufWriter.flush();
             bufWriter.close();
-            System.out.println(String.format("********************** File copy ended: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
+            Log.info(String.format("File copy ended: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
         } catch (IOException e) {
             System.err.println(e);
             return 304;
         }
-        System.out.println(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath,Utils.getLocalTimeStamp()));
+        Log.info(String.format("[HTTP server] File %s writing succeeded %s", targetFilePath, Utils.getLocalTimeStamp()));
         return 200;
     }
 }

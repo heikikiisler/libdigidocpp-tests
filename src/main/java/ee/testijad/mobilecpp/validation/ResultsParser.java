@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 import ee.testijad.mobilecpp.util.Utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -33,8 +34,8 @@ public class ResultsParser {
             versionInfo = node.get("version").asText();
             timestamp = node.get("start").asText();
             JsonNode resultNode = node.get("result");
-            results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, String>>>(){});
-            System.out.println(String.format("[Lib version] libdigidocpp version: %s from file: %s", versionInfo, resultsFilePath));
+            results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, String>>>() {});
+            Log.info(String.format("[Lib version] libdigidocpp version: %s from file: %s", versionInfo, resultsFilePath));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +59,7 @@ public class ResultsParser {
         files.forEachRemaining(file -> fileNames.add(file.getName()));
         Collections.sort(fileNames);
         String latestResultsFileName = fileNames.get(fileNames.size() - 1);
-        System.out.println("Using results from " + latestResultsFileName);
+        Log.info("Using results from " + latestResultsFileName);
         return latestResultsFileName;
     }
 

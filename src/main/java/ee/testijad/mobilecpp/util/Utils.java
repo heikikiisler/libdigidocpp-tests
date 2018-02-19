@@ -40,7 +40,7 @@ public class Utils {
     }
 
     private static void execCommand(String commandString) {
-        System.out.println(String.format("[COMMAND] %s", commandString));
+        Log.info(String.format("[COMMAND] %s", commandString));
         try {
             Process process;
             if (isMac()) {
@@ -55,7 +55,7 @@ public class Utils {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String result;
             while ((result = reader.readLine()) != null) {
-                System.out.println(String.format("[COMMAND RESULT] %s", result));
+                Log.info(String.format("[COMMAND RESULT] %s", result));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class Utils {
             String result;
             while ((result = reader.readLine()) != null) {
                 output.add(result);
-                System.out.println(String.format("[COMMAND] %s", result));
+                Log.info(String.format("[COMMAND] %s", result));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,14 +88,14 @@ public class Utils {
     }
 
     private static void copyFileToAndroid(String fileName) {
-        String commandString = String.format("adb push \"%s/%s\" \"/sdcard\"", Config.DATA_FILES_DIRECTORY,fileName);
+        String commandString = String.format("adb push \"%s/%s\" \"/sdcard\"", Config.DATA_FILES_DIRECTORY, fileName);
         if (isMac()) {
             //fileName = fileName.replace(" ", "\\ ");
             commandString = String.format("adb push './%s/%s' /sdcard", Config.DATA_FILES_DIRECTORY, fileName);
-            System.out.println(commandString);
+            Log.info(commandString);
             execMacCommand(commandString);
         } else {
-            System.out.println(commandString);
+            Log.info(commandString);
             execCommand(commandString);
         }
 
@@ -142,8 +142,8 @@ public class Utils {
 
     public static void createResultsFolderIfNotExists() {
         String path = System.getProperty("user.dir") + File.separator + Config.RESULT_FILES_DIRECTORY;
-        File file = new File (path);
-        if(!file.exists()) {
+        File file = new File(path);
+        if (!file.exists()) {
             file.mkdirs();
         }
     }
@@ -174,48 +174,47 @@ public class Utils {
 
     public static boolean verifyHttpServer(String urlString) {
         boolean result = false;
-        HttpURLConnection urlconnection = null;
+        HttpURLConnection urlConnection;
         try {
             URL url = new URL(urlString);
-            urlconnection = (HttpURLConnection) url.openConnection();
-            urlconnection.setRequestMethod("GET");
-            urlconnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            int responseCode =  urlconnection.getResponseCode();
-            BufferedReader in = new BufferedReader( new InputStreamReader(urlconnection.getInputStream()));
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            int responseCode = urlConnection.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String inputLine;
-            if((inputLine = in.readLine()) != null) {
+            if ((inputLine = in.readLine()) != null) {
                 result = true;
             }
             in.close();
-           urlconnection.disconnect();
-        }
-        catch(Exception e) {
+            urlConnection.disconnect();
+        } catch (Exception e) {
         }
         return result;
     }
 
     public static void myIPAddress() {
-        System.out.println("***************** Up and running network interfaces *****************");
+        Log.info("***************** Up and running network interfaces *****************");
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
             while (interfaces.hasMoreElements()) {
                 NetworkInterface networkInterface = interfaces.nextElement();
                 // drop inactive
-                if (!networkInterface.isUp() )
+                if (!networkInterface.isUp())
                     continue;
 
                 Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
-                    System.out.println(String.format("Interface name: [ %s ] --> ip: %s",
+                    Log.info(String.format("Interface name: [ %s ] --> ip: %s",
                             networkInterface.getDisplayName(), addr.getHostAddress()));
                 }
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        System.out.println("***************** *****************");
+        Log.info("***************** *****************");
     }
 
 }

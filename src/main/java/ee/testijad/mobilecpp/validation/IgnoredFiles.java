@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.validation;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,14 +16,14 @@ public class IgnoredFiles {
     private static List<String> getIgnoredFiles() {
         List<String> ignoredFileNames = new ArrayList<>();
         if (Config.IGNORED_FILES_FILE_NAME == null) {
-            System.out.println("Ignored files text file not defined in config, continuing without ignoring");
+            Log.info("Ignored files text file not defined in config, continuing without ignoring");
             return ignoredFileNames;
         }
         try {
             Files.readAllLines(Paths.get(Config.IGNORED_FILES_FILE_NAME))
                     .forEach(fileName -> ignoredFileNames.add(fileName.trim()));
         } catch (IOException e) {
-            System.out.println("Did not find ignored files text file, continuing without ignoring");
+            Log.info("Did not find ignored files text file, continuing without ignoring");
         }
         return ignoredFileNames;
     }

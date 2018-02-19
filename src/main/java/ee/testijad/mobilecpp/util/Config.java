@@ -52,7 +52,7 @@ public class Config {
         com.typesafe.config.Config config = ConfigFactory.parseFile(configFile);
         if (config.isEmpty()) {
             try {
-                System.out.println("Config not set up in \"properties.conf\". Copying from \"properties.conf.sample\"");
+                Log.info("Config not set up in \"properties.conf\". Copying from \"properties.conf.sample\"");
                 FileUtils.copyFile(new File("properties.conf.sample"), configFile);
             } catch (IOException e) {
                 e.printStackTrace();

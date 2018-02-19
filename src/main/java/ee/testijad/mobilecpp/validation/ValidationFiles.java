@@ -1,6 +1,7 @@
 package ee.testijad.mobilecpp.validation;
 
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
@@ -45,7 +46,7 @@ public class ValidationFiles {
                         String testFileName = row[TEST_FILE_NAME_ROW].trim();
                         int fileWarningRow = warningRow;
                         if (testFileName.endsWith(".ddoc")) {
-                            System.out.println("Filename: " + testFileName);
+                            Log.info("Filename: " + testFileName);
                             fileWarningRow = DDOC_WARNING_ROW;
                         }
                         TEST_FILES.add(new TestFile(
@@ -57,7 +58,7 @@ public class ValidationFiles {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Could not find validation text file " + fileName);
+            Log.error("Could not find validation text file " + fileName);
         }
     }
 

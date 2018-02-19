@@ -27,7 +27,7 @@ public class XmlFileBuilder {
         String fileName;
         while (myFiles.hasNext()) {
             fileName = myFiles.next().getName();
-            // System.out.println(String.format("File name: %s", fileName));
+            // Log.info(String.format("File name: %s", fileName));
             XmlTest myTest = new XmlTest(suite);
             myTest.setName(fileName);
             myTest.addParameter("fileName", fileName);
@@ -46,7 +46,7 @@ public class XmlFileBuilder {
         File folder = new File(directory);
         String[] extensions = new String[]{"ddoc", "bdoc", "adoc", "edoc", "asice", "asics", "sce", "scs"};
         try {
-            System.out.println("Getting all files in " + folder.getCanonicalPath());
+            Log.info("Getting all files in " + folder.getCanonicalPath());
         } catch (IOException e) {
             e.printStackTrace();
         }

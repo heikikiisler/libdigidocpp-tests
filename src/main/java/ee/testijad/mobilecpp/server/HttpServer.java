@@ -1,5 +1,7 @@
 package ee.testijad.mobilecpp.server;
 
+import ee.testijad.mobilecpp.util.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,23 +18,23 @@ public class HttpServer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("[HTTP server] Starting ...");
+        Log.info("[HTTP server] Starting ...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("[HTTP server] Accepting connections on port " + port);
+        Log.info("[HTTP server] Accepting connections on port " + port);
         while (!serverSocket.isClosed()) {
             try {
-                System.out.println("[HTTP server] Waiting connection");
+                Log.info("[HTTP server] Waiting connection");
                 Socket connection = serverSocket.accept();
-                System.out.println("[HTTP server] Accepted connection");
+                Log.info("[HTTP server] Accepted connection");
                 Thread thread = new Thread(new HttpRequestHandler(connection));
                 thread.start();
-                System.out.println("[HTTP server] Started HttpRequestHandler");
+                Log.info("[HTTP server] Started HttpRequestHandler");
             } catch (SocketException e) {
-                System.out.println("[HTTP server] Closed serverSocket on port " + port);
+                Log.info("[HTTP server] Closed serverSocket on port " + port);
             } catch (IOException e) {
                 e.printStackTrace();
             }

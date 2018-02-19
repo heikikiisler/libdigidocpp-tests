@@ -5,6 +5,7 @@ import ee.testijad.mobilecpp.appium.AppiumServer;
 import ee.testijad.mobilecpp.drivers.MobileDrivers;
 import ee.testijad.mobilecpp.server.HttpServer;
 import ee.testijad.mobilecpp.util.Config;
+import ee.testijad.mobilecpp.util.Log;
 import ee.testijad.mobilecpp.util.Utils;
 import io.appium.java_client.AppiumDriver;
 
@@ -20,7 +21,7 @@ public class RunApps {
     private static String baseUrl = Utils.getBaseUrl(httpServerPort) + "sync";
 
     public static void main(String[] args) {
-        System.out.println(String.format("Starting %s validation app", System.getProperty("mobilecpp.os")));
+        Log.info(String.format("Starting %s validation app", System.getProperty("mobilecpp.os")));
         setUp();
         switch (System.getProperty("mobilecpp.os").toLowerCase()) {
             case "android":
@@ -38,14 +39,13 @@ public class RunApps {
     public static void setUp() {
         appiumServer = new AppiumServer(communicationPort);
         httpServer = new HttpServer(httpServerPort);
-        System.out.println(String.format("[Http server] path %s", baseUrl));
+        Log.info(String.format("[Http server] path %s", baseUrl));
         Thread thread = new Thread(httpServer);
         thread.start();
         Utils.createResultsFolderIfNotExists();
     }
 
     private static void runAndroidApp() {
-        System.out.println("Action");
         Instant start, end;
         AppiumDriver driver = MobileDrivers.getAndroidDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidationAndroid(driver, baseUrl);
@@ -59,11 +59,11 @@ public class RunApps {
         }
         end = Instant.now();
         double gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
-        System.out.println(String.format("Working time: %.3f seconds ", gap));
+        Log.info(String.format("Working time: %.3f seconds ", gap));
     }
 
     private static void runIosApp() {
-        System.out.println("Action");
+        Log.info("Action");
         Instant start, end;
         AppiumDriver driver = MobileDrivers.getIosDriver(communicationPort);
         Action.pasteHttpServerUrlAndRunValidation(driver, baseUrl);
@@ -71,12 +71,10 @@ public class RunApps {
         Action.waitForIosResult(driver, Config.VALIDATION_TIMEOUT);
         end = Instant.now();
         double gap = ((double) ChronoUnit.MILLIS.between(start, end)) / 1000;
-        System.out.println(String.format("Working time: %.3f seconds ", gap));
+        Log.info(String.format("Working time: %.3f seconds ", gap));
     }
 
     private static void teardown() {
-        System.out.println("After");
-        // Stop server
         if (appiumServer != null) {
             appiumServer.stopServer();
         }
