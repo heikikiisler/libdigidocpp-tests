@@ -1,7 +1,11 @@
 package ee.testijad.mobilecpp.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -112,10 +116,10 @@ public class Utils {
         }
     }
 
-    public static String readFileIntoString(String fileName) {
+    public static String readFileIntoString(String fileName, Charset encoding) {
         StringBuilder contents = new StringBuilder();
         try {
-            Files.readAllLines(Paths.get(fileName)).forEach(contents::append);
+            Files.readAllLines(Paths.get(fileName), encoding).forEach(contents::append);
         } catch (IOException e) {
             e.printStackTrace();
         }

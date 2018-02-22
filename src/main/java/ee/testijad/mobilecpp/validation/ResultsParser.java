@@ -14,27 +14,37 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ResultsParser {
+
+    private static final Charset RESULTS_FILE_ENCODING = StandardCharsets.UTF_8;
+
+    private static final String VERSION_NODE = "version";
+    private static final String START_TIME_NODE = "start";
+    private static final String RESULT_NODE = "result";
 
     private static final String WARNINGS_SEPARATOR = "\\n";
     private static final String JSON_FILENAME_KEY = "f";
     private static final String JSON_RESULT_KEY = "s";
     private static final String JSON_WARNINGS_KEY = "d";
-    private List<Map<String, String>> results;
+    private static final String SIGNATURE_FILES_KEY = "c";
+
+    private List<Map<String, Object>> results;
     private String versionInfo;
     private String timestamp;
 
     private ResultsParser(String resultsFilePath) {
-        String contents = Utils.readFileIntoString(resultsFilePath);
+        String contents = Utils.readFileIntoString(resultsFilePath, RESULTS_FILE_ENCODING);
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode node = mapper.readValue(contents, JsonNode.class);
-            versionInfo = node.get("version").asText();
-            timestamp = node.get("start").asText();
-            JsonNode resultNode = node.get("result");
-            results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, String>>>() {});
+            versionInfo = node.get(VERSION_NODE).asText();
+            timestamp = node.get(START_TIME_NODE).asText();
+            JsonNode resultNode = node.get(RESULT_NODE);
+            results = mapper.readValue(resultNode.toString(), new TypeReference<List<Map<String, Object>>>() {});
             Log.info(String.format("[Lib version] libdigidocpp version: %s from file: %s", versionInfo, resultsFilePath));
 
         } catch (IOException e) {
@@ -64,12 +74,13 @@ public class ResultsParser {
     }
 
     public FileResult getTestFileResult(TestFile testFile) {
-        for (Map<String, String> result : results) {
+        for (Map<String, Object> result : results) {
             if (result.get(JSON_FILENAME_KEY).equals(testFile.getFileName())) {
-                String resultString = result.get(JSON_RESULT_KEY);
-                String warningString = result.get(JSON_WARNINGS_KEY);
+                String resultString = (String) result.get(JSON_RESULT_KEY);
+                String warningString = (String) result.get(JSON_WARNINGS_KEY);
                 Set<String> warnings = Utils.getWarningSetFromString(warningString, WARNINGS_SEPARATOR);
-                return new FileResult(ResultType.get(resultString), warnings);
+                List<Map<String, Object>> signatureFiles = (List<Map<String, Object>>) result.get(SIGNATURE_FILES_KEY);
+                return new FileResult(ResultType.get(resultString), warnings, signatureFiles);
             }
         }
         throw new RuntimeException(String.format("Could not find test file \"%s\" from results", testFile.getFileName()));

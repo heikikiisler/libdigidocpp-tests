@@ -12,6 +12,10 @@ import java.util.Set;
 @Listeners({TestListener.class})
 public class ValidationTests {
 
+    private static final String SEPARATOR_LINE = "--------------------------------------------------";
+    private static final String EMPTY_SIGNATURE_FILES_ERROR =
+            String.format("\n%s\nExpected at least one signature file in container, found none.\n", SEPARATOR_LINE);
+
     private static ResultsParser resultsParser = ResultsParser.getDefault();
     private SoftAssert softAssert;
 
@@ -24,10 +28,11 @@ public class ValidationTests {
         TestFile expected = ValidationFiles.getExpectedTestFile(fileName);
         FileResult result = resultsParser.getTestFileResult(expected);
         softAssert = new SoftAssert();
+        softAssert.assertTrue(result.getSignatureFiles().size() > 0, EMPTY_SIGNATURE_FILES_ERROR);
         softAssert.assertEquals(
                 result.getResultType(),
                 expected.getExpectedResultType(),
-                "\n--------------------------------------------------\n[Result comparison (OK or NOT)]:"
+                String.format("\n%s\n[Result comparison (OK or NOT)]:", SEPARATOR_LINE)
         );
         compareSets(
                 result.getWarnings(),
@@ -56,22 +61,25 @@ public class ValidationTests {
     }
 
     private static String getSetComparisonErrorMessage(TestFile expected, FileResult result) {
-        return String.format("\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
-                "---------------------------------------------------",
-                validationInfo(),
-                "- - - - - - - - - - - - - - - - - - - - - - - - - -",
+        return String.join("\n",
+                "",
+                SEPARATOR_LINE,
                 "- - - - - [WARNINGS COMPARISON FAILURE] - - - - - -",
+                "",
                 "- - - - - [All expected warnings:] - - - - - - - - ",
                 joinWarnings(expected.getExpectedWarnings()),
                 "- - - - - [All result warnings:] - - - - - - - - - ",
                 joinWarnings(result.getWarnings()),
-                "- - - - - [Result has all expected warnings]: - - -"
+                "- - - - - [Result has all expected warnings]: - - -",
+                ""
         );
     }
 
-    private static String validationInfo() {
-        return String.format("*** libdigidocpp version: %s ; result file timestamp: %s ***",
-                resultsParser.getVersionInfo(), resultsParser.getTimestamp());
+    private static String getValidationInfo() {
+        return String.format("libdigidocpp version: %s ; result file timestamp: %s",
+                resultsParser.getVersionInfo(),
+                resultsParser.getTimestamp()
+        );
     }
 
     private static String joinWarnings(Set<String> warningsSet) {

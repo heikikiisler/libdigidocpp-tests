@@ -6,6 +6,10 @@ import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class HttpRequestHandler implements Runnable {
@@ -20,7 +24,7 @@ public class HttpRequestHandler implements Runnable {
     public void run() {
         Log.info("[HTTP Server] Processing request on thread " + Thread.currentThread().getName());
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             OutputStream out = new BufferedOutputStream(socket.getOutputStream());
             PrintStream printStream = new PrintStream(out);
 
@@ -163,11 +167,9 @@ public class HttpRequestHandler implements Runnable {
     }
 
     private static int writeFile(BufferedReader in, String targetFilePath, int contentLength) {
-        File myFile = new File(targetFilePath);
-        BufferedWriter bufWriter;
         Log.info(String.format("[HTTP Server] Writing output file: %s", targetFilePath));
         try {
-            bufWriter = new BufferedWriter(new FileWriter(myFile));
+            BufferedWriter bufWriter = Files.newBufferedWriter(Paths.get(targetFilePath), StandardCharsets.UTF_8);
             Log.info(String.format("File copy started: %s %s", targetFilePath, Utils.getLocalTimeStamp()));
             char[] buffer = new char[(1024 * 64)];
             int len;
