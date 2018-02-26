@@ -75,7 +75,6 @@ task validationTest(type: Test) {
     useTestNG() {
         suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
         useDefaultListeners = true
-   //     testLogging.showStandardStreams = true
     }
     outputs.upToDateWhen {false}
 }

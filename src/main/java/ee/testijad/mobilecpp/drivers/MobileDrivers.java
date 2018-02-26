@@ -28,7 +28,6 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.ANDROID_AUTOMATION_NAME);
         capabilities.setCapability("autoGrantPermissions", true);
-        URL url = getServiceUrl(port);
         return new AndroidDriver(capabilities);
     }
 
@@ -52,7 +51,6 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.IOS_AUTOMATION_NAME);
         capabilities.setCapability(IOSMobileCapabilityType.WDA_LOCAL_PORT, Utils.getFreePort());
-        URL url = getServiceUrl(port);
         return new IOSDriver(capabilities);
     }
 

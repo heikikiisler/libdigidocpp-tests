@@ -67,7 +67,6 @@ public class Utils {
     }
 
     private static void execMacCommand(String commandString) {
-        List<String> output = new ArrayList<>();
         List<String> commands = new ArrayList<>();
         commands.add("/bin/sh");
         commands.add("-c");
@@ -78,7 +77,6 @@ public class Utils {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String result;
             while ((result = reader.readLine()) != null) {
-                output.add(result);
                 Log.info(String.format("[COMMAND] %s", result));
             }
         } catch (IOException e) {

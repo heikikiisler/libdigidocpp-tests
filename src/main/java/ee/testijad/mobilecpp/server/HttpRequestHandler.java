@@ -6,7 +6,6 @@ import ee.testijad.mobilecpp.util.Utils;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,6 +36,9 @@ public class HttpRequestHandler implements Runnable {
             String misc;
             while (true) {
                 misc = in.readLine();
+                if (misc == null || misc.length() == 0) {
+                    break;
+                }
                 Log.info(String.format("[HTTP header] %s", misc));
                 if (misc.startsWith("Content-Length:")) {
                     contentLength = Integer.parseInt(misc.split(":")[1].trim());
@@ -47,10 +49,6 @@ public class HttpRequestHandler implements Runnable {
                 if (misc.startsWith("Content-Type:")) {
                     Log.info(misc);
                     contentType = misc.split(":")[1].trim().toLowerCase();
-                }
-
-                if (misc == null || misc.length() == 0) {
-                    break;
                 }
             }
 
