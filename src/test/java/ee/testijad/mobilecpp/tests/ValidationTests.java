@@ -64,6 +64,8 @@ public class ValidationTests {
         return String.join("\n",
                 "",
                 SEPARATOR_LINE,
+                getValidationInfo(),
+                SEPARATOR_LINE,
                 "- - - - - [WARNINGS COMPARISON FAILURE] - - - - - -",
                 "",
                 "- - - - - [All expected warnings:] - - - - - - - - ",
