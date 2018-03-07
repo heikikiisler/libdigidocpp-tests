@@ -32,6 +32,8 @@ task prepareValidationZipFile(type: Zip) {
     exclude '*.zip'
     exclude '*.log'
     exclude '*.json'
+    exclude '*.zip'
+    exclude '*.tar'
     archiveName 'validationFiles.zip'
     destinationDir(file('download'))
     outputs.upToDateWhen {false}
@@ -63,7 +65,7 @@ task validateWithIos(type: JavaExec) {
 
 if (project.hasProperty('customResultsDir')) {
     long epoch = new Date().getTime()/1000
-    testReportDirName = "${buildDir}/" + epoch
+    testReportDirName = "${buildDir}/" + epoch + "-" + project.property('customResultsDir')
 }
 
 task validationTest(type: Test) {
