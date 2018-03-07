@@ -39,6 +39,7 @@ public class MobileDrivers {
 
         addStringCapabilityIfValueExists(capabilities, MobileCapabilityType.UDID, Config.IOS_UDID);
         addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.XCODE_ORG_ID, Config.IOS_XCODE_ORG_ID);
+        capabilities.setCapability(IOSMobileCapabilityType.XCODE_SIGNING_ID, "iPhone Developer");
         addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.KEYCHAIN_PATH, Config.IOS_XCODE_KEYCHAIN_PATH);
         addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.KEYCHAIN_PASSWORD, Config.IOS_XCODE_KEYCHAIN_PASSWORD);
         addStringCapabilityIfValueExists(capabilities, IOSMobileCapabilityType.UPDATE_WDA_BUNDLEID, Config.IOS_WDA_BUNDLE_ID);
