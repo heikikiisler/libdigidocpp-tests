@@ -63,9 +63,14 @@ task validateWithIos(type: JavaExec) {
     outputs.upToDateWhen {false}
 }
 
-if (project.hasProperty('customResultsDir')) {
-    long epoch = new Date().getTime()/1000
-    testReportDirName = "${buildDir}/" + epoch + "-" + project.property('customResultsDir')
+def customSettings = {
+    if (project.hasProperty('customResultsDir')) {
+        long epoch = new Date().getTime() / 1000
+        testReportDirName = "${buildDir}" + File.separator + epoch + "-" + project.property('customResultsDir')
+        project.logger.lifecycle("[Gradle] Custom testReportDirName: " + testReportDirName)
+    } else {
+        project.logger.lifecycle("[Gradle] Default testReportDirName: " + testReportDirName)
+    }
 }
 
 task validationTest(type: Test) {
@@ -74,6 +79,7 @@ task validationTest(type: Test) {
             systemProperty 'mobilecpp.results-file', project.property('resultsFile')
         }
     }
+    configure customSettings
     useTestNG() {
         suites buildProperties.getProperty("testSuiteFileDirectory").replaceAll("\"", "")
         useDefaultListeners = true
@@ -82,11 +88,19 @@ task validationTest(type: Test) {
 }
 
 task androidTest(type: GradleBuild) {
-    tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite', 'validationTest']
+    tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite']
+    doLast {
+        configure customSettings
+        validationTest.execute()
+    }
 }
 
 task iosTest(type: GradleBuild) {
-    tasks = ['prepareValidationZipFile', 'validateWithIos', 'generateSuite', 'validationTest']
+    tasks = ['prepareValidationZipFile', 'validateWithIos', 'generateSuite']
+    doLast {
+        configure customSettings
+        validationTest.execute()
+    }
 }
 
 task diagnosticHttpServer(type: JavaExec) {
