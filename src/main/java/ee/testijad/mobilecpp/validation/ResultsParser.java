@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ResultsParser {
 
@@ -93,4 +94,11 @@ public class ResultsParser {
     public String getTimestamp() {
         return timestamp;
     }
+
+    public List<String> getAllFileNames() {
+        return results.stream()
+                .map(result -> (String) result.get(JSON_FILENAME_KEY))
+                .collect(Collectors.toList());
+    }
+
 }

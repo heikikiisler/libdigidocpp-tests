@@ -39,7 +39,21 @@ task prepareValidationZipFile(type: Zip) {
     outputs.upToDateWhen {false}
 }
 
+def customSettings = {
+    if (project.hasProperty('customResultsDir')) {
+        long epoch = new Date().getTime() / 1000
+        testReportDirName = "${buildDir}" + File.separator + epoch + "-" + project.property('customResultsDir')
+        project.logger.lifecycle("[Gradle] Custom testReportDirName: " + testReportDirName)
+    } else {
+        project.logger.lifecycle("[Gradle] Default testReportDirName: " + testReportDirName)
+    }
+    if (project.hasProperty('resultsFile')) {
+        systemProperty 'mobilecpp.results-file', project.property('resultsFile')
+    }
+}
+
 task generateSuite(type: JavaExec) {
+    configure customSettings
     classpath = sourceSets.test.runtimeClasspath
     main = "ee.testijad.mobilecpp.tests.GenerateSuite"
     outputs.upToDateWhen {false}
@@ -63,20 +77,10 @@ task validateWithIos(type: JavaExec) {
     outputs.upToDateWhen {false}
 }
 
-def customSettings = {
-    if (project.hasProperty('customResultsDir')) {
-        long epoch = new Date().getTime() / 1000
-        testReportDirName = "${buildDir}" + File.separator + epoch + "-" + project.property('customResultsDir')
-        project.logger.lifecycle("[Gradle] Custom testReportDirName: " + testReportDirName)
-    } else {
-        project.logger.lifecycle("[Gradle] Default testReportDirName: " + testReportDirName)
-    }
-}
-
 task validationTest(type: Test) {
     doFirst {
         if (project.hasProperty('resultsFile')) {
-            systemProperty 'mobilecpp.results-file', project.property('resultsFile')
+            generateSuite.execute()
         }
     }
     configure customSettings

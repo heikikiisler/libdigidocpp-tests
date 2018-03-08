@@ -18,18 +18,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class XmlFileBuilder {
+public class TestSuiteBuilder {
 
     private static final String[] SIGNATURE_FILE_EXTENSIONS = new String[]{"ddoc", "bdoc", "adoc", "edoc", "asice", "asics", "sce", "scs"};
 
-    public static void generateTestSuite(String directory, String className) {
+    public static void generateTestSuite(List<String> fileNames, String className) {
         XmlSuite suite = new XmlSuite();
         suite.setName("Data files validation suite");
         suite.setVerbose(2);
-        Iterator<File> testFiles = fileListBuilder(directory);
-        String fileName;
-        while (testFiles.hasNext()) {
-            fileName = testFiles.next().getName();
+        for (String fileName : fileNames) {
             XmlTest test = new XmlTest(suite);
             test.setName(fileName);
             test.addParameter("fileName", getFileNameParameter(fileName));
@@ -44,7 +41,11 @@ public class XmlFileBuilder {
         saveSuiteFile(suite, Config.TEST_SUITE_FILE_DIRECTORY);
     }
 
-    private static Iterator<File> fileListBuilder(String directory) {
+    public static void generateTestSuite(String directory, String className) {
+        generateTestSuite(getFileNamesListFromDirectory(directory), className);
+    }
+
+    private static List<String> getFileNamesListFromDirectory(String directory) {
         File folder = new File(directory);
         try {
             Log.info("Getting all files in " + folder.getCanonicalPath());
@@ -52,7 +53,12 @@ public class XmlFileBuilder {
             e.printStackTrace();
         }
         IOFileFilter filter = new SuffixFileFilter(SIGNATURE_FILE_EXTENSIONS, IOCase.INSENSITIVE);
-        return FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
+        Iterator<File> iterator = FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
+        List<String> fileNames = new ArrayList<>();
+        while (iterator.hasNext()) {
+            fileNames.add(iterator.next().getName());
+        }
+        return fileNames;
     }
 
     private static void saveSuiteFile(XmlSuite suite, String filePath) {
