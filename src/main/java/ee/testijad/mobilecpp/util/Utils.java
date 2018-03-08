@@ -1,5 +1,7 @@
 package ee.testijad.mobilecpp.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -169,6 +171,7 @@ public class Utils {
                     .filter(warning -> !warning.equals(""))
                     .map(warning -> warning.replaceAll("(ERROR|WARNING): [0-9]+ - ", ""))
                     .map(String::trim)
+                    .map(warning -> StringUtils.removeEnd(warning, "."))
                     .forEach(warnings::add);
         }
         return warnings;
