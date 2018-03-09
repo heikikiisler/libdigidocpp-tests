@@ -52,7 +52,8 @@ public class MobileDrivers {
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 600);
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, Config.IOS_AUTOMATION_NAME);
         capabilities.setCapability(IOSMobileCapabilityType.WDA_LOCAL_PORT, Utils.getFreePort());
-        return new IOSDriver(capabilities);
+        URL url = getServiceUrl(port);
+        return new IOSDriver(url, capabilities);
     }
 
     private static URL getServiceUrl(int port) {
