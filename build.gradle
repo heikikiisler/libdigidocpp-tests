@@ -26,6 +26,7 @@ file("properties.conf").withInputStream {
 }
 
 task prepareValidationZipFile(type: Zip) {
+    description 'Generate zip file with data files for apps'
     from 'dataFiles'
     include '*'
     exclude '*.txt'
@@ -53,6 +54,7 @@ def customSettings = {
 }
 
 task generateSuite(type: JavaExec) {
+    description 'Generate TestNG testsuite based on list of data file names'
     configure customSettings
     classpath = sourceSets.test.runtimeClasspath
     main = "ee.testijad.mobilecpp.tests.GenerateSuite"
@@ -60,6 +62,7 @@ task generateSuite(type: JavaExec) {
 }
 
 task validateWithAndroid(type: JavaExec) {
+    description 'Android app downloads zip file from http server, validates data files and writes results back through the http server'
     doFirst {
         systemProperty 'mobilecpp.os', 'android'
     }
@@ -69,6 +72,7 @@ task validateWithAndroid(type: JavaExec) {
 }
 
 task validateWithIos(type: JavaExec) {
+    description 'iOS app downloads zip file from http server, validates data files and writes results back through the http server'
     doFirst {
         systemProperty 'mobilecpp.os', 'ios'
     }
@@ -78,6 +82,7 @@ task validateWithIos(type: JavaExec) {
 }
 
 task validationTest(type: Test) {
+    description 'Compares validation results with expected results. Execution based on TestNG testsuite file'
     doFirst {
         if (project.hasProperty('resultsFile')) {
             generateSuite.execute()
@@ -92,6 +97,7 @@ task validationTest(type: Test) {
 }
 
 task androidTest(type: GradleBuild) {
+    description 'Full Android app based workflow from data files to result comparison'
     tasks = ['prepareValidationZipFile', 'validateWithAndroid', 'generateSuite']
     doLast {
         configure customSettings
@@ -100,6 +106,7 @@ task androidTest(type: GradleBuild) {
 }
 
 task iosTest(type: GradleBuild) {
+    description 'Full iOS app based workflow from data files to result comparison'
     tasks = ['prepareValidationZipFile', 'validateWithIos', 'generateSuite']
     doLast {
         configure customSettings
@@ -108,11 +115,13 @@ task iosTest(type: GradleBuild) {
 }
 
 task diagnosticHttpServer(type: JavaExec) {
+    description 'For test http connectivity between mobile device and http server'
     classpath = sourceSets.main.runtimeClasspath
     main = "ee.testijad.mobilecpp.server.HttpServerRunner"
     outputs.upToDateWhen {false}
 }
 
 task wrapper(type: Wrapper) {
+    description 'Gradle wrapper'
     gradleVersion = '4.3.1'
 }
