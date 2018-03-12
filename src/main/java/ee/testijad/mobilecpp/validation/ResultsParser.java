@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class ResultsParser {
 
@@ -65,11 +66,13 @@ public class ResultsParser {
         File folder = new File(Config.RESULT_FILES_DIRECTORY);
         String extension = "json";
         IOFileFilter filter = new SuffixFileFilter(extension, IOCase.INSENSITIVE);
-        Iterator<File> files = FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
-        List<String> fileNames = new ArrayList<>();
-        files.forEachRemaining(file -> fileNames.add(file.getName()));
-        Collections.sort(fileNames);
-        String latestResultsFileName = fileNames.get(fileNames.size() - 1);
+        Iterator<File> fileIterator = FileUtils.iterateFiles(folder, filter, DirectoryFileFilter.DIRECTORY);
+        List<File> files = new ArrayList<>();
+        fileIterator.forEachRemaining(files::add);
+        String latestResultsFileName = files.stream()
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElseThrow(() -> (new RuntimeException("No results file found")))
+                .getName();
         Log.info("Using results from " + latestResultsFileName);
         return latestResultsFileName;
     }
